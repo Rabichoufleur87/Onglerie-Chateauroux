@@ -32,15 +32,15 @@
   var boutonTheme = document.querySelector("[data-action='theme']");
   if (boutonTheme) {
     var maj = function () {
-      var sombre = document.documentElement.getAttribute("data-theme") === "dark";
+      var sombre = document.documentElement.getAttribute("data-mode") === "dark";
       boutonTheme.setAttribute("aria-pressed", sombre ? "true" : "false");
       boutonTheme.setAttribute("aria-label", sombre ? "Activer le mode clair" : "Activer le mode sombre");
     };
     maj();
     boutonTheme.addEventListener("click", function () {
-      var actuel = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+      var actuel = document.documentElement.getAttribute("data-mode") === "dark" ? "dark" : "light";
       var suivant = actuel === "dark" ? "light" : "dark";
-      document.documentElement.setAttribute("data-theme", suivant);
+      document.documentElement.setAttribute("data-mode", suivant);
       try { localStorage.setItem("fnails-theme", suivant); } catch (e) {}
       maj();
     });
@@ -194,5 +194,52 @@
       selection.removeAllRanges();
       selection.addRange(plage);
     };
+  }
+
+  var piste = document.querySelector("[data-piste]");
+  if (piste) {
+    var pasDefilement = function () {
+      var premiere = piste.querySelector(".carte");
+      if (!premiere) { return 280; }
+      var style = window.getComputedStyle(piste);
+      return premiere.getBoundingClientRect().width + parseFloat(style.columnGap || style.gap || 24);
+    };
+
+    var defiler = function (sens) {
+      var max = piste.scrollWidth - piste.clientWidth;
+      var cible = piste.scrollLeft + sens * pasDefilement();
+      if (cible >= max - 4) {
+        cible = 0;
+      } else if (cible < 0) {
+        cible = max;
+      }
+      piste.scrollTo({ left: cible, behavior: "smooth" });
+    };
+
+    var minuteur = null;
+    var reduireMouvement = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    var demarrerAuto = function () {
+      if (reduireMouvement || minuteur) { return; }
+      minuteur = setInterval(function () { defiler(1); }, 3500);
+    };
+    var arreterAuto = function () {
+      clearInterval(minuteur);
+      minuteur = null;
+    };
+    var relancerAuto = function () { arreterAuto(); demarrerAuto(); };
+
+    var precedent = document.querySelector("[data-action='carrousel-prec']");
+    var suivant = document.querySelector("[data-action='carrousel-suiv']");
+    if (precedent) { precedent.addEventListener("click", function () { defiler(-1); relancerAuto(); }); }
+    if (suivant) { suivant.addEventListener("click", function () { defiler(1); relancerAuto(); }); }
+
+    piste.addEventListener("mouseenter", arreterAuto);
+    piste.addEventListener("mouseleave", demarrerAuto);
+    piste.addEventListener("touchstart", arreterAuto, { passive: true });
+    piste.addEventListener("focusin", arreterAuto);
+    piste.addEventListener("focusout", demarrerAuto);
+
+    demarrerAuto();
   }
 })();

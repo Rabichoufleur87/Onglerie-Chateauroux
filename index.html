@@ -4,7 +4,7 @@
   try {
     var saved = localStorage.getItem("fnails-theme");
     var theme = saved || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    document.documentElement.setAttribute("data-theme", theme);
+    document.documentElement.setAttribute("data-mode", theme);
   } catch (e) {}
 })();
 </script>
@@ -84,49 +84,57 @@
       </div>
       <a class="btn btn--secondaire btn--petit" href="prestations.html">Tous les tarifs</a>
     </div>
-    <div class="grille-cartes">
-      <div class="carte">
-        <span class="carte__icone">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c1.5 3 3 5 3 8a3 3 0 1 1-6 0c0-3 1.5-5 3-8z"/><path d="M6 22c0-3 2.5-5 6-5s6 2 6 5"/></svg>
-        </span>
-        <h3>Pose gel</h3>
-        <p>Une pose durable et brillante, personnalisable en longueur et en forme.</p>
+    <div class="carrousel-prestations">
+      <div class="carrousel-prestations__piste" data-piste tabindex="0" role="region" aria-label="Prestations, défiler avec les flèches du clavier">
+        <div class="carte">
+          <span class="carte__icone">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c1.5 3 3 5 3 8a3 3 0 1 1-6 0c0-3 1.5-5 3-8z"/><path d="M6 22c0-3 2.5-5 6-5s6 2 6 5"/></svg>
+          </span>
+          <h3>Pose gel</h3>
+          <p>Une pose durable et brillante, personnalisable en longueur et en forme.</p>
+        </div>
+        <div class="carte">
+          <span class="carte__icone">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M9 9h6v6H9z"/></svg>
+          </span>
+          <h3>Pose américaine</h3>
+          <p>Renfort discret et naturel pour fortifier l'ongle tout en gardant du volume.</p>
+        </div>
+        <div class="carte">
+          <span class="carte__icone">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M2 12h20"/></svg>
+          </span>
+          <h3>Gainage &amp; renforcement</h3>
+          <p>Fortifiez vos ongles naturels avec un gainage en résine ou en gel.</p>
+        </div>
+        <div class="carte">
+          <span class="carte__icone">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l2.5 6.5L21 11l-6.5 2.5L12 20l-2.5-6.5L3 11l6.5-2.5z"/></svg>
+          </span>
+          <h3>Nail art</h3>
+          <p>Décors, strass, dégradés, effets miroir : votre style, sur mesure.</p>
+        </div>
+        <div class="carte">
+          <span class="carte__icone">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21c-4-3-8-6.5-8-11a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 4.5-4 8-8 11z"/></svg>
+          </span>
+          <h3>Soin des pieds</h3>
+          <p>Pose vernis semi-permanent et soin pour des pieds prêts pour toutes les saisons.</p>
+        </div>
+        <div class="carte">
+          <span class="carte__icone">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          </span>
+          <h3>Sur rendez-vous</h3>
+          <p>Réservez votre créneau en ligne, en quelques clics, où que vous soyez.</p>
+        </div>
       </div>
-      <div class="carte">
-        <span class="carte__icone">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M9 9h6v6H9z"/></svg>
-        </span>
-        <h3>Pose américaine</h3>
-        <p>Renfort discret et naturel pour fortifier l'ongle tout en gardant du volume.</p>
-      </div>
-      <div class="carte">
-        <span class="carte__icone">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M2 12h20"/></svg>
-        </span>
-        <h3>Gainage &amp; renforcement</h3>
-        <p>Fortifiez vos ongles naturels avec un gainage en résine ou en gel.</p>
-      </div>
-      <div class="carte">
-        <span class="carte__icone">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l2.5 6.5L21 11l-6.5 2.5L12 20l-2.5-6.5L3 11l6.5-2.5z"/></svg>
-        </span>
-        <h3>Nail art</h3>
-        <p>Décors, strass, dégradés, effets miroir : votre style, sur mesure.</p>
-      </div>
-      <div class="carte">
-        <span class="carte__icone">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21c-4-3-8-6.5-8-11a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 4.5-4 8-8 11z"/></svg>
-        </span>
-        <h3>Soin des pieds</h3>
-        <p>Pose vernis semi-permanent et soin pour des pieds prêts pour toutes les saisons.</p>
-      </div>
-      <div class="carte">
-        <span class="carte__icone">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-        </span>
-        <h3>Sur rendez-vous</h3>
-        <p>Réservez votre créneau en ligne, en quelques clics, où que vous soyez.</p>
-      </div>
+      <button type="button" class="carrousel-fleche carrousel-fleche--prec" data-action="carrousel-prec" aria-label="Prestation précédente">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <button type="button" class="carrousel-fleche carrousel-fleche--suiv" data-action="carrousel-suiv" aria-label="Prestation suivante">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
     </div>
   </div>
 </section>

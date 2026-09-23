@@ -20,7 +20,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
+  :root:not([data-mode="light"]) {
     color-scheme: dark;
     --rose-clair: #3a2830;
     --rose: #6b4552;
@@ -37,7 +37,7 @@
   }
 }
 
-:root[data-theme="dark"] {
+:root[data-mode="dark"] {
   color-scheme: dark;
   --rose-clair: #3a2830;
   --rose: #6b4552;
@@ -224,8 +224,8 @@ p { margin: 0 0 1em; color: var(--brun-doux); }
 .bouton-icone:hover { border-color: var(--rose-fonce); transform: translateY(-1px); }
 .bouton-theme svg { width: 18px; height: 18px; }
 .bouton-theme .icone-lune { display: none; }
-:root[data-theme="dark"] .bouton-theme .icone-soleil { display: none; }
-:root[data-theme="dark"] .bouton-theme .icone-lune { display: block; }
+:root[data-mode="dark"] .bouton-theme .icone-soleil { display: none; }
+:root[data-mode="dark"] .bouton-theme .icone-lune { display: block; }
 
 /* ===== Boutons ===== */
 .btn {
@@ -319,6 +319,49 @@ p { margin: 0 0 1em; color: var(--brun-doux); }
   justify-content: center;
   margin-bottom: 1rem;
   color: var(--rose-fonce);
+}
+
+/* ===== Carrousel prestations ===== */
+.carrousel-prestations { position: relative; }
+.carrousel-prestations__piste {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 0.25rem 0.25rem 1rem;
+  margin: -0.25rem -0.25rem -1rem;
+  scrollbar-width: none;
+}
+.carrousel-prestations__piste::-webkit-scrollbar { display: none; }
+.carrousel-prestations__piste:focus-visible { outline: 2px solid var(--rose-fonce); outline-offset: 4px; }
+.carrousel-prestations__piste .carte {
+  flex: 0 0 260px;
+  scroll-snap-align: start;
+}
+.carrousel-fleche {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--bordure);
+  background: var(--blanc);
+  box-shadow: var(--ombre);
+  color: var(--brun);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+}
+.carrousel-fleche svg { width: 18px; height: 18px; }
+.carrousel-fleche:hover { color: var(--rose-fonce); }
+.carrousel-fleche--prec { left: -14px; }
+.carrousel-fleche--suiv { right: -14px; }
+@media (max-width: 760px) {
+  .carrousel-fleche { display: none; }
 }
 .carte__icone svg { width: 22px; height: 22px; }
 
