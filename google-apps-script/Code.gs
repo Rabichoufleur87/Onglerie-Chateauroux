@@ -1,6 +1,7 @@
 /**
- * Fnails.chtrx — réception des demandes de rendez-vous du site
- * et création automatique de l'événement dans Google Calendar.
+ * Fnails.chtrx — réception des demandes de rendez-vous du site,
+ * création automatique de l'événement dans Google Calendar, et
+ * email de confirmation envoyé au client.
  *
  * Installation (voir aussi README.md à la racine du dépôt) :
  * 1. Aller sur https://script.google.com et créer un nouveau projet,
@@ -14,6 +15,10 @@
  * 5. Copier l'URL du Web App affichée après le déploiement.
  * 6. Coller cette URL dans assets/js/app.js, dans la constante
  *    RDV_WEBAPP_URL en haut du fichier.
+ *
+ * L'email de confirmation est envoyé gratuitement via Gmail (MailApp),
+ * sans aucun compte ni service tiers — juste le compte Google déjà
+ * utilisé pour le script.
  *
  * Chaque nouvelle demande de rendez-vous vérifie d'abord qu'aucun
  * événement n'existe déjà sur le créneau demandé, puis crée l'événement
@@ -60,9 +65,42 @@ function doPost(e) {
 
     agenda.createEvent(titre, debut, fin, { description: description });
 
+    envoyerEmailConfirmation(p);
+
     return reponse({ ok: true });
   } finally {
     verrou.releaseLock();
+  }
+}
+
+function envoyerEmailConfirmation(p) {
+  if (!p.email) {
+    return;
+  }
+
+  var morceauxDate = String(p.date).split("-");
+  var dateAffichee = morceauxDate.length === 3
+    ? morceauxDate[2] + "/" + morceauxDate[1] + "/" + morceauxDate[0]
+    : p.date;
+
+  var sujet = "Confirmation de votre rendez-vous — Fnails.chtrx";
+  var corps = [
+    "Bonjour " + p.nom + ",",
+    "",
+    "Votre rendez-vous est confirmé :",
+    "",
+    "Prestation : " + p.prestation,
+    "Date : " + dateAffichee,
+    "Heure : " + p.heure,
+    "",
+    "À bientôt !",
+    "Fnails.chtrx"
+  ].join("\n");
+
+  try {
+    MailApp.sendEmail(p.email, sujet, corps);
+  } catch (erreur) {
+    // L'email a échoué : le rendez-vous reste créé, on n'interrompt rien.
   }
 }
 
