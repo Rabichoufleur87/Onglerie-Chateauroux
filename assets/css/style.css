@@ -447,7 +447,7 @@ button[disabled] { opacity: 0.65; cursor: not-allowed; }
 .diaporama__cadre {
   position: relative;
   width: 100%;
-  max-width: 520px;
+  max-width: 380px;
   aspect-ratio: 4 / 5;
   border-radius: var(--rayon);
   overflow: hidden;
