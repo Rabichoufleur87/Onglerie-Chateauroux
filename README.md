@@ -30,9 +30,9 @@ fonctionnement, contrôlés par la constante `RDV_WEBAPP_URL` en haut de
 
 - **Tant que `RDV_WEBAPP_URL` est vide** (mode actuel) : au clic sur
   « Envoyer la demande », le client mail du visiteur s'ouvre avec un email
-  pré-rempli adressé à `RDV_EMAIL` (constante juste en dessous, à remplacer
-  par la vraie adresse de l'onglerie). Un bouton « Copier le texte » sert de
-  secours si aucun client mail n'est configuré sur l'appareil.
+  pré-rempli adressé à `RDV_EMAIL` (déjà réglée sur `fnails.chtrx@gmail.com`).
+  Un bouton « Copier le texte » sert de secours si aucun client mail n'est
+  configuré sur l'appareil.
 - **Une fois `RDV_WEBAPP_URL` renseignée** : chaque demande est envoyée en
   temps réel au script, qui vérifie qu'aucun événement n'existe déjà sur ce
   créneau avant de créer l'événement (prestation, date, heure, nom,
@@ -84,12 +84,11 @@ placeholder dans le site (marquées « à venir ») :
 - Horaires d'ouverture détaillés
 - SIRET / mentions légales complètes
 - Lien Instagram (le compte `@fnails.chtrx` est mentionné mais non lié)
-- Adresse email de réception des demandes de RDV (`RDV_EMAIL` dans
-  `assets/js/app.js`, actuellement un placeholder)
 - Connexion Google Calendar (`RDV_WEBAPP_URL`, voir section ci-dessus)
 
 Confirmées et déjà intégrées :
 - Ville : Châteauroux
+- Email : fnails.chtrx@gmail.com
 - TikTok : [@fnails.chtrx_](https://www.tiktok.com/@fnails.chtrx_)
 - Tarifs des 17 prestations (pose américaine, pose capsules + gel, gainage,
   dépose, pédicure)

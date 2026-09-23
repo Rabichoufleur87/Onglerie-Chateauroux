@@ -6,7 +6,7 @@
   // et le README). Tant qu'elle est vide, le formulaire utilise le mode "mailto" de secours.
   var RDV_WEBAPP_URL = "";
   // Adresse à laquelle les demandes sont envoyées en mode "mailto" de secours.
-  var RDV_EMAIL = "email-a-completer@fnails-chtrx.fr";
+  var RDV_EMAIL = "fnails.chtrx@gmail.com";
 
   var boutonMenu = document.querySelector("[data-action='menu']");
   var nav = document.getElementById("navigation");
