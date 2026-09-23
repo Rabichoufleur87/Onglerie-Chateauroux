@@ -71,8 +71,7 @@ l'événement dans l'agenda, sans aucune action manuelle.
    </div>
    ```
 3. Faire de même pour la vignette de la page d'accueil (`index.html`, section
-   « Réalisations ») et pour la photo du salon sur `a-propos.html`
-   (`.carte-placeholder`).
+   « Réalisations »).
 
 ## Informations à compléter
 
