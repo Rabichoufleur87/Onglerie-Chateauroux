@@ -533,7 +533,6 @@ button[disabled] { opacity: 0.65; cursor: not-allowed; }
 }
 @media (max-width: 640px) {
   .diaporama__cadre { aspect-ratio: 3 / 4; }
-  .diaporama__fleche { display: none; }
 }
 
 /* ===== Galerie ===== */

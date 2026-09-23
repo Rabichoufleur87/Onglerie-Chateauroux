@@ -287,9 +287,24 @@
 
     diaporama.addEventListener("mouseenter", diapoArreter);
     diaporama.addEventListener("mouseleave", diapoDemarrer);
-    diaporama.addEventListener("touchstart", diapoArreter, { passive: true });
     diaporama.addEventListener("focusin", diapoArreter);
     diaporama.addEventListener("focusout", diapoDemarrer);
+
+    var diapoToucheX = null;
+    diaporama.addEventListener("touchstart", function (e) {
+      diapoArreter();
+      diapoToucheX = e.touches[0].clientX;
+    }, { passive: true });
+    diaporama.addEventListener("touchend", function (e) {
+      if (diapoToucheX !== null) {
+        var delta = e.changedTouches[0].clientX - diapoToucheX;
+        if (Math.abs(delta) > 40) {
+          if (delta < 0) { diapoSuivant(); } else { diapoPrecedent(); }
+        }
+        diapoToucheX = null;
+      }
+      diapoDemarrer();
+    });
 
     diapoAfficher(0);
     diapoDemarrer();
