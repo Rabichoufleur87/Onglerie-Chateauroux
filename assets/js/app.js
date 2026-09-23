@@ -54,6 +54,7 @@
     var resultatTexte = document.getElementById("rdv-resultat-texte");
     var zoneTexte = document.getElementById("rdv-texte");
     var boutonCopier = document.querySelector("[data-action='copier-rdv']");
+    var boutonEnvoyer = formulaireRdv.querySelector("button[type='submit']");
 
     champPrestation.addEventListener("change", function () {
       var option = champPrestation.options[champPrestation.selectedIndex];
@@ -73,32 +74,75 @@
       );
     };
 
+    var afficherResultat = function (texte, succes) {
+      resultat.hidden = false;
+      resultat.classList.toggle("rdv-resultat--erreur", !succes);
+      resultatTexte.textContent = texte;
+    };
+
     formulaireRdv.addEventListener("submit", function (e) {
+      e.preventDefault();
+
       var d = {
         prestation: champPrestation.value,
         date: document.getElementById("rdv-date").value,
         heure: document.getElementById("rdv-heure").value,
+        duree_min: champDuree.value,
         nom: document.getElementById("rdv-nom").value,
         telephone: document.getElementById("rdv-telephone").value,
         email: document.getElementById("rdv-email").value,
         message: document.getElementById("rdv-message").value
       };
 
-      resultat.hidden = false;
-
       if (RDV_WEBAPP_URL) {
-        // Le formulaire est configuré : la soumission POST native (via l'iframe
-        // caché ci-dessous) part directement vers le Web App Google Apps Script,
-        // qui crée l'événement dans l'agenda. On laisse la navigation se faire.
-        formulaireRdv.action = RDV_WEBAPP_URL;
-        resultatTexte.textContent = "Votre demande a été envoyée : elle apparaîtra directement dans l'agenda du salon.";
+        // Le formulaire est configuré : on envoie la demande au Web App
+        // Google Apps Script et on attend sa réponse pour savoir si le
+        // créneau était libre avant d'afficher une confirmation.
+        boutonEnvoyer.disabled = true;
+        boutonEnvoyer.textContent = "Envoi en cours...";
         zoneTexte.hidden = true;
         boutonCopier.hidden = true;
+
+        var donnees = new URLSearchParams(d);
+
+        fetch(RDV_WEBAPP_URL, { method: "POST", body: donnees })
+          .then(function (reponseHttp) { return reponseHttp.json(); })
+          .then(function (resultatJson) {
+            if (resultatJson && resultatJson.ok) {
+              afficherResultat(
+                "Votre demande a été envoyée : elle apparaît directement dans l'agenda du salon. Vous recevrez une confirmation.",
+                true
+              );
+              formulaireRdv.reset();
+            } else if (resultatJson && resultatJson.raison === "conflit") {
+              afficherResultat(
+                "Ce créneau vient d'être réservé par quelqu'un d'autre. Merci de choisir une autre date ou un autre horaire.",
+                false
+              );
+            } else {
+              afficherResultat(
+                "Votre demande n'a pas pu être envoyée. Merci de réessayer, ou de nous contacter directement via Instagram ou TikTok.",
+                false
+              );
+            }
+          })
+          .catch(function () {
+            afficherResultat(
+              "Votre demande n'a pas pu être envoyée (problème de connexion). Merci de réessayer, ou de nous contacter directement via Instagram ou TikTok.",
+              false
+            );
+          })
+          .then(function () {
+            boutonEnvoyer.disabled = false;
+            boutonEnvoyer.textContent = "Envoyer la demande";
+          });
+
         return;
       }
 
       // Mode de secours : pas encore configuré, on ouvre le client mail du visiteur.
-      e.preventDefault();
+      // Comme personne ne vérifie la disponibilité dans ce mode, la date/l'heure
+      // restent à confirmer manuellement par le salon avant validation.
       var texte = construireTexte(d);
       var sujet = "Demande de RDV — " + d.prestation;
       var lienMailto =
@@ -106,9 +150,11 @@
         "?subject=" + encodeURIComponent(sujet) +
         "&body=" + encodeURIComponent(texte);
 
+      resultat.hidden = false;
+      resultat.classList.remove("rdv-resultat--erreur");
       resultatTexte.innerHTML = "";
       resultatTexte.appendChild(document.createTextNode(
-        "Votre logiciel de messagerie va s'ouvrir avec la demande pré-remplie. " +
+        "Votre logiciel de messagerie va s'ouvrir avec la demande pré-remplie (créneau à confirmer par le salon). " +
         "S'il ne s'ouvre pas, copiez le texte ci-dessous et envoyez-le manuellement à "
       ));
       var fort = document.createElement("strong");

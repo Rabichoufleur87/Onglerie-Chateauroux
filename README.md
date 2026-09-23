@@ -33,9 +33,12 @@ fonctionnement, contrôlés par la constante `RDV_WEBAPP_URL` en haut de
   pré-rempli adressé à `RDV_EMAIL` (constante juste en dessous, à remplacer
   par la vraie adresse de l'onglerie). Un bouton « Copier le texte » sert de
   secours si aucun client mail n'est configuré sur l'appareil.
-- **Une fois `RDV_WEBAPP_URL` renseignée** : chaque demande crée
-  automatiquement l'événement (prestation, date, heure, nom, téléphone,
-  email du client) dans l'agenda Google Calendar connecté au script.
+- **Une fois `RDV_WEBAPP_URL` renseignée** : chaque demande est envoyée en
+  temps réel au script, qui vérifie qu'aucun événement n'existe déjà sur ce
+  créneau avant de créer l'événement (prestation, date, heure, nom,
+  téléphone, email du client) dans l'agenda Google Calendar. Si le créneau
+  vient d'être pris par quelqu'un d'autre, le client voit un message et doit
+  choisir un autre horaire — impossible de doubler un rendez-vous.
 
 ### Activer la création automatique dans Google Calendar
 

@@ -390,6 +390,11 @@ p { margin: 0 0 1em; color: var(--brun-doux); }
 }
 .champ textarea { resize: vertical; }
 .rdv-resultat { margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.8rem; }
+.rdv-resultat--erreur .encadre-note {
+  background: color-mix(in srgb, var(--rose-fonce) 22%, var(--creme));
+  color: var(--brun);
+}
+button[disabled] { opacity: 0.65; cursor: not-allowed; }
 .rdv-texte {
   background: var(--blanc);
   border: 1px solid var(--bordure);

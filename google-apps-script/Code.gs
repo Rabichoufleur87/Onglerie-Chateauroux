@@ -15,35 +15,59 @@
  * 6. Coller cette URL dans assets/js/app.js, dans la constante
  *    RDV_WEBAPP_URL en haut du fichier.
  *
- * Chaque nouvelle demande de rendez-vous crée un événement dans l'agenda
- * ci-dessous, avec la prestation, le nom, le téléphone et l'email du
- * client dans la description.
+ * Chaque nouvelle demande de rendez-vous vérifie d'abord qu'aucun
+ * événement n'existe déjà sur le créneau demandé, puis crée l'événement
+ * (prestation, nom, téléphone, email du client) dans l'agenda. Un verrou
+ * évite que deux demandes envoyées au même moment ne passent toutes les
+ * deux la vérification.
  */
 
 var CALENDAR_ID = "primary"; // "primary" = l'agenda principal de ce compte Google
 
 function doPost(e) {
-  var p = e.parameter;
+  var verrou = LockService.getScriptLock();
 
-  var duree = parseInt(p.duree_min, 10) || 60;
-  var debut = new Date(p.date + "T" + p.heure + ":00");
-  var fin = new Date(debut.getTime() + duree * 60000);
+  try {
+    verrou.waitLock(10000);
+  } catch (erreur) {
+    return reponse({ ok: false, raison: "occupe" });
+  }
 
-  var titre = "RDV — " + p.prestation + " — " + p.nom;
-  var description = [
-    "Prestation : " + p.prestation,
-    "Client : " + p.nom,
-    "Téléphone : " + p.telephone,
-    "Email : " + p.email,
-    "Message : " + (p.message || "—"),
-    "",
-    "Demande reçue via le site Fnails.chtrx."
-  ].join("\n");
+  try {
+    var p = e.parameter;
 
-  var agenda = CalendarApp.getCalendarById(CALENDAR_ID);
-  agenda.createEvent(titre, debut, fin, { description: description });
+    var duree = parseInt(p.duree_min, 10) || 60;
+    var debut = new Date(p.date + "T" + p.heure + ":00");
+    var fin = new Date(debut.getTime() + duree * 60000);
 
+    var agenda = CalendarApp.getCalendarById(CALENDAR_ID);
+
+    var conflits = agenda.getEvents(debut, fin);
+    if (conflits.length > 0) {
+      return reponse({ ok: false, raison: "conflit" });
+    }
+
+    var titre = "RDV — " + p.prestation + " — " + p.nom;
+    var description = [
+      "Prestation : " + p.prestation,
+      "Client : " + p.nom,
+      "Téléphone : " + p.telephone,
+      "Email : " + p.email,
+      "Message : " + (p.message || "—"),
+      "",
+      "Demande reçue via le site Fnails.chtrx."
+    ].join("\n");
+
+    agenda.createEvent(titre, debut, fin, { description: description });
+
+    return reponse({ ok: true });
+  } finally {
+    verrou.releaseLock();
+  }
+}
+
+function reponse(objet) {
   return ContentService
-    .createTextOutput(JSON.stringify({ ok: true }))
+    .createTextOutput(JSON.stringify(objet))
     .setMimeType(ContentService.MimeType.JSON);
 }
