@@ -498,16 +498,26 @@ button[disabled] { opacity: 0.65; cursor: not-allowed; }
   overflow: hidden;
   box-shadow: var(--ombre-forte);
   background: var(--blanc);
+  touch-action: pan-y;
+  cursor: grab;
 }
-.diaporama__slide {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transform: scale(1.04);
-  transition: opacity 1s ease, transform 1.6s ease;
+.diaporama__cadre:active { cursor: grabbing; }
+.diaporama__piste {
+  display: flex;
+  height: 100%;
+  transition: transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
-.diaporama__slide.active { opacity: 1; transform: scale(1); z-index: 1; }
-.diaporama__slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.diaporama__piste.sans-transition { transition: none; }
+.diaporama__slide { flex: 0 0 100%; height: 100%; }
+.diaporama__slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  -webkit-user-drag: none;
+  user-select: none;
+  pointer-events: none;
+}
 .diaporama__fleche.carrousel-fleche--prec { left: 12px; }
 .diaporama__fleche.carrousel-fleche--suiv { right: 12px; }
 .diaporama__points {
@@ -529,7 +539,7 @@ button[disabled] { opacity: 0.65; cursor: not-allowed; }
 .diaporama__points button.active { background: var(--rose-fonce); transform: scale(1.4); }
 .diaporama__points button:active { transform: scale(1.05); }
 @media (prefers-reduced-motion: reduce) {
-  .diaporama__slide { transition: opacity 0.3s ease; transform: none; }
+  .diaporama__piste { transition: none; }
 }
 @media (max-width: 640px) {
   .diaporama__cadre { aspect-ratio: 3 / 4; }

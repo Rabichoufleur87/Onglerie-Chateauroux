@@ -245,30 +245,58 @@
 
   var diaporama = document.querySelector("[data-diaporama]");
   if (diaporama) {
-    var diapoSlides = diaporama.querySelectorAll("[data-slide]");
+    var diapoCadre = diaporama.querySelector(".diaporama__cadre");
+    var diapoPiste = diaporama.querySelector("[data-piste-diapo]");
+    var diapoTousLesSlides = diapoPiste.children; // 2 clones (début/fin) + les photos réelles
+    var diapoTotalReel = diapoTousLesSlides.length - 2;
     var diapoPoints = diaporama.querySelectorAll("[data-points] button");
-    var diapoIndex = 0;
+    var diapoIndex = 1; // 0 = clone de fin, 1..N = photos réelles, N+1 = clone de début
     var diapoMinuteur = null;
     var diapoReduireMouvement = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    var diapoAfficher = function (i) {
-      diapoIndex = (i + diapoSlides.length) % diapoSlides.length;
-      diapoSlides.forEach(function (slide, n) {
-        slide.classList.toggle("active", n === diapoIndex);
-      });
+    var diapoPositionner = function () {
+      diapoPiste.style.transform = "translateX(" + (-diapoIndex * 100) + "%)";
+    };
+
+    var diapoMajPoints = function () {
+      var reel = (diapoIndex - 1 + diapoTotalReel) % diapoTotalReel;
       diapoPoints.forEach(function (point, n) {
-        var actif = n === diapoIndex;
+        var actif = n === reel;
         point.classList.toggle("active", actif);
         point.setAttribute("aria-current", actif ? "true" : "false");
       });
     };
 
-    var diapoSuivant = function () { diapoAfficher(diapoIndex + 1); };
-    var diapoPrecedent = function () { diapoAfficher(diapoIndex - 1); };
+    var diapoSansTransition = function (fn) {
+      diapoPiste.classList.add("sans-transition");
+      fn();
+      void diapoPiste.offsetHeight;
+      diapoPiste.classList.remove("sans-transition");
+    };
+
+    var diapoAllerA = function (i) {
+      diapoIndex = i;
+      diapoPositionner();
+      diapoMajPoints();
+    };
+
+    var diapoSuivant = function () { diapoAllerA(diapoIndex + 1); };
+    var diapoPrecedent = function () { diapoAllerA(diapoIndex - 1); };
+
+    // Boucle infinie : au passage sur un clone, on saute sans transition
+    // vers la vraie photo équivalente, une fois l'animation terminée.
+    diapoPiste.addEventListener("transitionend", function (e) {
+      if (e.propertyName && e.propertyName !== "transform") { return; }
+      if (diapoIndex === diapoTotalReel + 1) {
+        diapoSansTransition(function () { diapoIndex = 1; diapoPositionner(); });
+      } else if (diapoIndex === 0) {
+        diapoSansTransition(function () { diapoIndex = diapoTotalReel; diapoPositionner(); });
+      }
+    });
 
     var diapoDemarrer = function () {
       if (diapoReduireMouvement || diapoMinuteur) { return; }
-      diapoMinuteur = setInterval(diapoSuivant, 4000);
+      diapoMinuteur = setInterval(diapoSuivant, 4200);
     };
     var diapoArreter = function () {
       clearInterval(diapoMinuteur);
@@ -282,7 +310,7 @@
     if (diapoSuiv) { diapoSuiv.addEventListener("click", function () { diapoSuivant(); diapoRelancer(); }); }
 
     diapoPoints.forEach(function (point, n) {
-      point.addEventListener("click", function () { diapoAfficher(n); diapoRelancer(); });
+      point.addEventListener("click", function () { diapoAllerA(n + 1); diapoRelancer(); });
     });
 
     diaporama.addEventListener("mouseenter", diapoArreter);
@@ -290,23 +318,50 @@
     diaporama.addEventListener("focusin", diapoArreter);
     diaporama.addEventListener("focusout", diapoDemarrer);
 
-    var diapoToucheX = null;
-    diaporama.addEventListener("touchstart", function (e) {
-      diapoArreter();
-      diapoToucheX = e.touches[0].clientX;
-    }, { passive: true });
-    diaporama.addEventListener("touchend", function (e) {
-      if (diapoToucheX !== null) {
-        var delta = e.changedTouches[0].clientX - diapoToucheX;
-        if (Math.abs(delta) > 40) {
-          if (delta < 0) { diapoSuivant(); } else { diapoPrecedent(); }
-        }
-        diapoToucheX = null;
-      }
-      diapoDemarrer();
-    });
+    // Glisser au doigt ou à la souris (Pointer Events couvre les deux) :
+    // le rail suit le geste en direct, puis s'anime jusqu'à la photo
+    // suivante/précédente ou revient à sa place si le geste est trop court.
+    var diapoPointeurActif = null;
+    var diapoDepartX = 0;
+    var diapoDeltaActuel = 0;
+    var diapoLargeur = 1;
 
-    diapoAfficher(0);
+    var diapoSurPointerDown = function (e) {
+      if (e.pointerType === "mouse" && e.button !== 0) { return; }
+      diapoPointeurActif = e.pointerId;
+      diapoDepartX = e.clientX;
+      diapoDeltaActuel = 0;
+      diapoLargeur = diapoCadre.clientWidth || 1;
+      diapoPiste.classList.add("sans-transition");
+      diapoArreter();
+      if (diapoCadre.setPointerCapture) {
+        try { diapoCadre.setPointerCapture(diapoPointeurActif); } catch (erreur) {}
+      }
+    };
+    var diapoSurPointerMove = function (e) {
+      if (diapoPointeurActif === null || e.pointerId !== diapoPointeurActif) { return; }
+      diapoDeltaActuel = e.clientX - diapoDepartX;
+      var pourcent = (diapoDeltaActuel / diapoLargeur) * 100;
+      diapoPiste.style.transform = "translateX(" + (-diapoIndex * 100 + pourcent) + "%)";
+    };
+    var diapoSurPointerFin = function (e) {
+      if (diapoPointeurActif === null || e.pointerId !== diapoPointeurActif) { return; }
+      diapoPiste.classList.remove("sans-transition");
+      var seuil = diapoLargeur * 0.16;
+      if (diapoDeltaActuel < -seuil) { diapoSuivant(); }
+      else if (diapoDeltaActuel > seuil) { diapoPrecedent(); }
+      else { diapoPositionner(); }
+      diapoPointeurActif = null;
+      diapoDeltaActuel = 0;
+      diapoDemarrer();
+    };
+
+    diapoCadre.addEventListener("pointerdown", diapoSurPointerDown);
+    diapoCadre.addEventListener("pointermove", diapoSurPointerMove);
+    diapoCadre.addEventListener("pointerup", diapoSurPointerFin);
+    diapoCadre.addEventListener("pointercancel", diapoSurPointerFin);
+
+    diapoSansTransition(function () { diapoPositionner(); diapoMajPoints(); });
     diapoDemarrer();
   }
 })();
