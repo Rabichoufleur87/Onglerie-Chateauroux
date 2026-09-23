@@ -1,6 +1,7 @@
 /* ===== Fnails.chtrx — Onglerie à Châteauroux ===== */
 
 :root {
+  color-scheme: light;
   --rose-clair: #f7e4e8;
   --rose: #eec3cd;
   --rose-fonce: #c98a9a;
@@ -9,11 +10,47 @@
   --brun-doux: #6b5b56;
   --or: #b8905f;
   --blanc: #ffffff;
+  --bordure: rgba(44, 36, 34, 0.12);
+  --bordure-douce: rgba(44, 36, 34, 0.08);
   --ombre: 0 10px 30px rgba(44, 36, 34, 0.08);
   --ombre-forte: 0 16px 40px rgba(44, 36, 34, 0.16);
   --rayon: 16px;
   --police-titre: Georgia, "Iowan Old Style", "Times New Roman", serif;
   --police-texte: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --rose-clair: #3a2830;
+    --rose: #6b4552;
+    --rose-fonce: #e3a6b4;
+    --creme: #1c1512;
+    --brun: #f3e9e6;
+    --brun-doux: #c9b8b3;
+    --or: #d9b077;
+    --blanc: #2a201d;
+    --bordure: rgba(255, 255, 255, 0.16);
+    --bordure-douce: rgba(255, 255, 255, 0.1);
+    --ombre: 0 10px 30px rgba(0, 0, 0, 0.35);
+    --ombre-forte: 0 16px 40px rgba(0, 0, 0, 0.5);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --rose-clair: #3a2830;
+  --rose: #6b4552;
+  --rose-fonce: #e3a6b4;
+  --creme: #1c1512;
+  --brun: #f3e9e6;
+  --brun-doux: #c9b8b3;
+  --or: #d9b077;
+  --blanc: #2a201d;
+  --bordure: rgba(255, 255, 255, 0.16);
+  --bordure-douce: rgba(255, 255, 255, 0.1);
+  --ombre: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --ombre-forte: 0 16px 40px rgba(0, 0, 0, 0.5);
 }
 
 * { box-sizing: border-box; }
@@ -57,7 +94,7 @@ p { margin: 0 0 1em; color: var(--brun-doux); }
   display: inline-block;
   font-family: var(--police-titre);
   font-style: italic;
-  color: var(--rose-fonce);
+  color: var(--or);
   letter-spacing: 0.04em;
   margin-bottom: 0.5rem;
   font-size: 1.05rem;
@@ -97,11 +134,11 @@ p { margin: 0 0 1em; color: var(--brun-doux); }
 /* ===== En-tête ===== */
 .entete {
   position: sticky;
-  top: 0;
+  top: env(safe-area-inset-top, 0px);
   z-index: 100;
-  background: rgba(251, 246, 242, 0.92);
+  background: color-mix(in srgb, var(--creme) 92%, transparent);
   backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(44, 36, 34, 0.08);
+  border-bottom: 1px solid var(--bordure-douce);
 }
 .entete__interieur {
   display: flex;
@@ -119,7 +156,7 @@ p { margin: 0 0 1em; color: var(--brun-doux); }
   color: var(--brun);
   white-space: nowrap;
 }
-.marque__point { color: var(--rose-fonce); }
+.marque__point { color: var(--or); }
 .marque__sous {
   font-family: var(--police-texte);
   font-size: 0.7rem;
@@ -170,6 +207,26 @@ p { margin: 0 0 1em; color: var(--brun-doux); }
   transition: transform 0.2s, opacity 0.2s;
 }
 
+.bouton-icone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--bordure);
+  background: var(--blanc);
+  color: var(--brun);
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s;
+}
+.bouton-icone:hover { border-color: var(--rose-fonce); transform: translateY(-1px); }
+.bouton-theme svg { width: 18px; height: 18px; }
+.bouton-theme .icone-lune { display: none; }
+:root[data-theme="dark"] .bouton-theme .icone-soleil { display: none; }
+:root[data-theme="dark"] .bouton-theme .icone-lune { display: block; }
+
 /* ===== Boutons ===== */
 .btn {
   display: inline-flex;
@@ -194,7 +251,7 @@ p { margin: 0 0 1em; color: var(--brun-doux); }
 .btn--secondaire {
   background: var(--blanc);
   color: var(--brun);
-  border-color: rgba(44, 36, 34, 0.15);
+  border-color: var(--bordure);
 }
 .btn--secondaire:hover { border-color: var(--rose-fonce); }
 .btn--petit { padding: 0.55rem 1.1rem; font-size: 0.85rem; }
@@ -268,7 +325,7 @@ p { margin: 0 0 1em; color: var(--brun-doux); }
 /* ===== Tableau tarifs ===== */
 .tarifs { display: flex; flex-direction: column; gap: 2.5rem; }
 .tarifs__groupe h3 {
-  border-bottom: 1px solid rgba(44, 36, 34, 0.12);
+  border-bottom: 1px solid var(--bordure);
   padding-bottom: 0.6rem;
   margin-bottom: 0.8rem;
 }
@@ -278,7 +335,7 @@ p { margin: 0 0 1em; color: var(--brun-doux); }
   justify-content: space-between;
   gap: 1rem;
   padding: 0.7rem 0;
-  border-bottom: 1px dashed rgba(44, 36, 34, 0.14);
+  border-bottom: 1px dashed var(--bordure);
 }
 .tarifs__ligne:last-child { border-bottom: none; }
 .tarifs__nom { color: var(--brun); }
@@ -383,7 +440,7 @@ p { margin: 0 0 1em; color: var(--brun-doux); }
   padding: 3.5rem 0;
 }
 .bande-cta h2 { color: var(--blanc); }
-.bande-cta p { color: rgba(247, 228, 232, 0.85); max-width: 520px; margin-left: auto; margin-right: auto; }
+.bande-cta p { color: var(--rose-clair); max-width: 520px; margin-left: auto; margin-right: auto; }
 
 /* ===== Pied de page ===== */
 .pied { background: var(--rose-clair); padding: 3.5rem 0 1.5rem; margin-top: 2rem; }
@@ -392,7 +449,7 @@ p { margin: 0 0 1em; color: var(--brun-doux); }
   grid-template-columns: 1.4fr 1fr 1fr;
   gap: 2.5rem;
   padding-bottom: 2rem;
-  border-bottom: 1px solid rgba(44, 36, 34, 0.1);
+  border-bottom: 1px solid var(--bordure-douce);
 }
 .pied h3 { font-size: 1rem; font-family: var(--police-texte); text-transform: uppercase; letter-spacing: 0.06em; color: var(--brun-doux); }
 .pied ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
@@ -435,7 +492,7 @@ p { margin: 0 0 1em; color: var(--brun-doux); }
     transition: transform 0.25s ease;
     overflow-y: auto;
     padding: 1.5rem 0;
-    border-top: 1px solid rgba(44,36,34,0.08);
+    border-top: 1px solid var(--bordure-douce);
   }
   .nav.ouvert { transform: translateY(0); }
   .nav__liste { flex-direction: column; align-items: center; gap: 1.2rem; }
