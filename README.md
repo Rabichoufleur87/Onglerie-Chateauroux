@@ -75,18 +75,17 @@ l'événement dans l'agenda, sans aucune action manuelle.
 
 ## Informations à compléter
 
-Plusieurs informations n'ont pas pu être confirmées publiquement et restent en
-placeholder dans le site (marquées « à venir ») :
+Il reste peu de choses à compléter :
 
-- Adresse exacte du salon
-- Numéro de téléphone
-- Horaires d'ouverture détaillés
-- SIRET / mentions légales complètes
+- Nom de la responsable de la publication (mentions légales)
 - Lien Instagram (le compte `@fnails.chtrx` est mentionné mais non lié)
 - Connexion Google Calendar (`RDV_WEBAPP_URL`, voir section ci-dessus)
 
 Confirmées et déjà intégrées :
-- Ville : Châteauroux
+- Adresse : 71 rue de la Poste, 36000 Châteauroux
+- Téléphone : 06 58 81 11 98
+- Horaires : 9h-13h et 14h-19h, sur rendez-vous
+- SIRET : 943 481 648 00013
 - Email : fnails.chtrx@gmail.com
 - TikTok : [@fnails.chtrx_](https://www.tiktok.com/@fnails.chtrx_)
 - Tarifs des 17 prestations (pose américaine, pose capsules + gel, gainage,
