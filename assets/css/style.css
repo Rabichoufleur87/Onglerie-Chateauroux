@@ -335,18 +335,20 @@ p { margin: 0 0 1em; color: var(--brun-doux); }
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  border: 1px solid var(--bordure);
-  background: var(--blanc);
-  box-shadow: var(--ombre);
+  border: none;
+  background: transparent;
+  box-shadow: none;
   color: var(--brun);
+  opacity: 0.6;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 2;
+  transition: opacity 0.2s, color 0.2s;
 }
-.carrousel-fleche svg { width: 18px; height: 18px; }
-.carrousel-fleche:hover { color: var(--rose-fonce); }
+.carrousel-fleche svg { width: 18px; height: 18px; filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.35)); }
+.carrousel-fleche:hover { color: var(--rose-fonce); opacity: 1; }
 .carrousel-fleche--prec { left: -14px; }
 .carrousel-fleche--suiv { right: -14px; }
 @media (max-width: 760px) {
