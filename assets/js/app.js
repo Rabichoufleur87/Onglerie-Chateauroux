@@ -242,4 +242,56 @@
 
     demarrerAuto();
   }
+
+  var diaporama = document.querySelector("[data-diaporama]");
+  if (diaporama) {
+    var diapoSlides = diaporama.querySelectorAll("[data-slide]");
+    var diapoPoints = diaporama.querySelectorAll("[data-points] button");
+    var diapoIndex = 0;
+    var diapoMinuteur = null;
+    var diapoReduireMouvement = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    var diapoAfficher = function (i) {
+      diapoIndex = (i + diapoSlides.length) % diapoSlides.length;
+      diapoSlides.forEach(function (slide, n) {
+        slide.classList.toggle("active", n === diapoIndex);
+      });
+      diapoPoints.forEach(function (point, n) {
+        var actif = n === diapoIndex;
+        point.classList.toggle("active", actif);
+        point.setAttribute("aria-current", actif ? "true" : "false");
+      });
+    };
+
+    var diapoSuivant = function () { diapoAfficher(diapoIndex + 1); };
+    var diapoPrecedent = function () { diapoAfficher(diapoIndex - 1); };
+
+    var diapoDemarrer = function () {
+      if (diapoReduireMouvement || diapoMinuteur) { return; }
+      diapoMinuteur = setInterval(diapoSuivant, 4000);
+    };
+    var diapoArreter = function () {
+      clearInterval(diapoMinuteur);
+      diapoMinuteur = null;
+    };
+    var diapoRelancer = function () { diapoArreter(); diapoDemarrer(); };
+
+    var diapoPrec = diaporama.querySelector("[data-action='diapo-prec']");
+    var diapoSuiv = diaporama.querySelector("[data-action='diapo-suiv']");
+    if (diapoPrec) { diapoPrec.addEventListener("click", function () { diapoPrecedent(); diapoRelancer(); }); }
+    if (diapoSuiv) { diapoSuiv.addEventListener("click", function () { diapoSuivant(); diapoRelancer(); }); }
+
+    diapoPoints.forEach(function (point, n) {
+      point.addEventListener("click", function () { diapoAfficher(n); diapoRelancer(); });
+    });
+
+    diaporama.addEventListener("mouseenter", diapoArreter);
+    diaporama.addEventListener("mouseleave", diapoDemarrer);
+    diaporama.addEventListener("touchstart", diapoArreter, { passive: true });
+    diaporama.addEventListener("focusin", diapoArreter);
+    diaporama.addEventListener("focusout", diapoDemarrer);
+
+    diapoAfficher(0);
+    diapoDemarrer();
+  }
 })();
