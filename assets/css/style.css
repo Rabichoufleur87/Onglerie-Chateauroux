@@ -353,6 +353,58 @@ p { margin: 0 0 1em; color: var(--brun-doux); }
   color: var(--brun-doux);
 }
 
+/* ===== Formulaire de rendez-vous ===== */
+#formulaire-rdv {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.champ-ligne {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+}
+.champ { display: flex; flex-direction: column; gap: 0.4rem; }
+.champ label {
+  font-size: 0.85rem;
+  color: var(--brun-doux);
+  font-weight: 600;
+}
+.champ input,
+.champ select,
+.champ textarea {
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--brun);
+  background: var(--blanc);
+  border: 1px solid var(--bordure);
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  width: 100%;
+}
+.champ input:focus,
+.champ select:focus,
+.champ textarea:focus {
+  outline: 2px solid var(--rose-fonce);
+  outline-offset: 1px;
+}
+.champ textarea { resize: vertical; }
+.rdv-resultat { margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.8rem; }
+.rdv-texte {
+  background: var(--blanc);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  padding: 1rem 1.2rem;
+  font-family: var(--police-texte);
+  font-size: 0.85rem;
+  color: var(--brun);
+  white-space: pre-wrap;
+}
+
+@media (max-width: 640px) {
+  .champ-ligne { grid-template-columns: 1fr; }
+}
+
 /* ===== Galerie ===== */
 .galerie-grille {
   display: grid;
