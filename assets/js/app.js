@@ -296,6 +296,8 @@
     };
 
     var diapoAllerA = function (i) {
+      // Clics très rapides : ne jamais dépasser les clones de début/fin
+      if (i < 0 || i > diapoTotalReel + 1) { return; }
       diapoIndex = i;
       diapoPositionner();
       diapoMajPoints();
@@ -349,6 +351,9 @@
 
     var diapoSurPointerDown = function (e) {
       if (e.pointerType === "mouse" && e.button !== 0) { return; }
+      // Les flèches sont dans le cadre : sans ce test, la capture du pointeur
+      // détournerait leur clic vers le cadre et elles ne répondraient plus.
+      if (e.target.closest("button")) { return; }
       diapoPointeurActif = e.pointerId;
       diapoDepartX = e.clientX;
       diapoDeltaActuel = 0;
