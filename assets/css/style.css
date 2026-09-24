@@ -590,6 +590,29 @@ button.btn[disabled] { opacity: 0.6; cursor: progress; }
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
+/* Texte à gauche, petite photo portrait à droite */
+.tuile--mixte { flex-direction: row; gap: clamp(1rem, 2vw, 1.75rem); }
+.tuile__texte { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.tuile--mixte .tuile__haut { margin-bottom: 1.5rem; }
+.tuile__vignette {
+  position: relative;
+  flex: none;
+  width: clamp(7.5rem, 30%, 11rem);
+  min-height: 11rem;
+  border-radius: calc(var(--rayon-xl) - var(--bezel) - 0.6rem);
+  overflow: hidden;
+  box-shadow: var(--ombre-douce);
+}
+/* L'image suit la taille de la vignette au lieu de l'agrandir */
+.tuile__vignette img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.2s var(--ease);
+}
+.coque:hover .tuile__vignette img { transform: scale(1.04); }
 .tuile--photo { padding: 0; color: #fbf6f2; }
 .tuile--photo img {
   position: absolute;
