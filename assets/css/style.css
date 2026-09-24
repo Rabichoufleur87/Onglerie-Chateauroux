@@ -40,28 +40,6 @@
   --gouttiere: clamp(1rem, 4vw, 2.5rem);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-mode="light"]) {
-    color-scheme: dark;
-    --fond: #15100e;
-    --fond-2: #1c1512;
-    --surface: #221a17;
-    --encre: #f3eae4;
-    --encre-douce: #b9a8a0;
-    --encre-pale: #86766f;
-    --accent: #e3a4b2;
-    --accent-doux: #3b262b;
-    --sur-encre: #15100e;
-    --ligne: rgba(255, 240, 235, 0.08);
-    --ligne-forte: rgba(255, 240, 235, 0.16);
-    --coque: rgba(255, 240, 235, 0.04);
-    --reflet: inset 0 1px 1px rgba(255, 255, 255, 0.06);
-    --ombre: 0 30px 60px -30px rgba(0, 0, 0, 0.7);
-    --ombre-douce: 0 18px 40px -26px rgba(0, 0, 0, 0.6);
-    --verre: rgba(28, 21, 18, 0.7);
-  }
-}
-
 :root[data-mode="dark"] {
   color-scheme: dark;
   --fond: #15100e;

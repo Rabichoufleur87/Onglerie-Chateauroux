@@ -10,15 +10,14 @@
 <meta property="og:title" content="Mentions légales · Fnails.chtrx">
 <meta property="og:description" content="Mentions légales du site Fnails.chtrx, onglerie à Châteauroux.">
 <meta property="og:image" content="assets/img/nail-art-dore-marbre.jpg">
-<meta name="theme-color" content="#f5efe8" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#15100e" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f5efe8">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23231a17'/%3E%3Ctext x='50%25' y='54%25' text-anchor='middle' dominant-baseline='middle' font-family='Georgia,serif' font-style='italic' font-size='40' fill='%23f5efe8'%3Ef%3C/text%3E%3Ccircle cx='47' cy='46' r='4' fill='%23e3a4b2'/%3E%3C/svg%3E">
 <script>
 (function () {
   document.documentElement.classList.add("js");
   try {
     var saved = localStorage.getItem("fnails-theme");
-    var theme = saved || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    var theme = saved || "light"; // clair par défaut, sombre seulement si choisi
     document.documentElement.setAttribute("data-mode", theme);
   } catch (e) {}
 })();
@@ -26,7 +25,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..500&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/css/style.css?v=3">
+<link rel="stylesheet" href="assets/css/style.css?v=4">
 </head>
 <body>
 
@@ -172,6 +171,6 @@
   </div>
 </footer>
 
-<script src="assets/js/app.js?v=3" defer></script>
+<script src="assets/js/app.js?v=4" defer></script>
 </body>
 </html>
