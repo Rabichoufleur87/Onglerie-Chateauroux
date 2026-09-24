@@ -596,9 +596,15 @@ button.btn[disabled] { opacity: 0.6; cursor: progress; }
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transform: scale(1.02);
+  object-fit: contain;
+  object-position: 75% center;
   transition: transform 1.2s var(--ease);
+}
+/* Photo entière (non recadrée) posée sur une version floutée d'elle-même */
+.tuile--photo .tuile__fond {
+  object-fit: cover;
+  filter: blur(28px) saturate(1.2);
+  transform: scale(1.2);
 }
 .tuile--photo::after {
   content: "";
@@ -618,7 +624,7 @@ button.btn[disabled] { opacity: 0.6; cursor: progress; }
 .tuile--photo p { color: rgba(251, 246, 242, 0.82); }
 .tuile--photo .tuile__num { color: rgba(251, 246, 242, 0.7); }
 .tuile--photo .tuile__prix { background: rgba(251, 246, 242, 0.14); box-shadow: inset 0 0 0 1px rgba(251, 246, 242, 0.25); color: #fbf6f2; }
-.coque:hover .tuile--photo img { transform: scale(1.07); }
+.coque:hover .tuile--photo img:not(.tuile__fond) { transform: scale(1.03); }
 .tuile--sombre { background: var(--encre); color: var(--sur-encre); }
 .tuile--sombre h3 { color: var(--sur-encre); }
 .tuile--sombre p { color: color-mix(in srgb, var(--sur-encre) 72%, transparent); }
