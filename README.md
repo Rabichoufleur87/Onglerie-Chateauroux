@@ -13,7 +13,7 @@ a-propos.html            À propos
 contact.html               Contact
 mentions-legales.html        Mentions légales
 assets/css/style.css      Styles
-assets/js/app.js            Menu mobile, thème, formulaire de rendez-vous
+assets/js/app.js            Menu, thème, apparitions, diaporama, formulaire de RDV
 assets/img/                  Photos du salon / des réalisations
 google-apps-script/Code.gs   Backend Google Calendar (voir plus bas)
 ```
@@ -64,14 +64,15 @@ l'événement dans l'agenda, sans aucune action manuelle.
 
 1. Déposer les fichiers images dans `assets/img/`.
 2. Dans `galerie.html`, repérer le bloc `<!-- GALERIE:DEBUT -->` / `<!-- GALERIE:FIN -->`
-   et remplacer une vignette `galerie-vignette--attente` par :
+   et ajouter une vignette :
    ```html
-   <div class="galerie-vignette">
-     <img src="assets/img/nom-du-fichier.jpg" alt="Description de la pose">
+   <div class="galerie-vignette reveal">
+     <img src="assets/img/nom-du-fichier.jpg" alt="Description de la pose" loading="lazy">
    </div>
    ```
-3. Faire de même pour la vignette de la page d'accueil (`index.html`, section
-   « Réalisations »).
+3. Pour la faire apparaître dans le diaporama de l'accueil, ajouter aussi une
+   `diaporama__slide` dans `index.html` (section « Réalisations ») et un bouton
+   dans `diaporama__points`.
 
 ## Informations à compléter
 

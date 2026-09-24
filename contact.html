@@ -1,6 +1,21 @@
-<title>Contact Fnails.chtrx</title>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Contact & rendez-vous · Fnails.chtrx</title>
+<meta name="description" content="Prenez rendez-vous chez Fnails.chtrx, onglerie au 71 rue de la Poste à Châteauroux. 06 58 81 11 98, 9h-13h et 14h-19h.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Fnails.chtrx">
+<meta property="og:title" content="Contact & rendez-vous · Fnails.chtrx">
+<meta property="og:description" content="Prenez rendez-vous chez Fnails.chtrx, onglerie au 71 rue de la Poste à Châteauroux. 06 58 81 11 98, 9h-13h et 14h-19h.">
+<meta property="og:image" content="assets/img/nail-art-dore-marbre.jpg">
+<meta name="theme-color" content="#f5efe8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#15100e" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23231a17'/%3E%3Ctext x='50%25' y='54%25' text-anchor='middle' dominant-baseline='middle' font-family='Georgia,serif' font-style='italic' font-size='40' fill='%23f5efe8'%3Ef%3C/text%3E%3Ccircle cx='47' cy='46' r='4' fill='%23e3a4b2'/%3E%3C/svg%3E">
 <script>
 (function () {
+  document.documentElement.classList.add("js");
   try {
     var saved = localStorage.getItem("fnails-theme");
     var theme = saved || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
@@ -8,26 +23,19 @@
   } catch (e) {}
 })();
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..500&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
 
 <a class="lien-evitement" href="#contenu">Aller au contenu principal</a>
 
-<div class="bandeau-info">
-  <div class="conteneur">
-    <span>71 rue de la Poste, Châteauroux · <a href="tel:+33658811198">06 58 81 11 98</a></span>
-    <span class="bandeau-info__fin">
-      <span class="bandeau-info__reseaux">
-        <a href="https://www.tiktok.com/@fnails.chtrx_" target="_blank" rel="noopener">TikTok</a>
-        <span>Instagram : @fnails.chtrx</span>
-      </span>
-    </span>
-  </div>
-</div>
-
 <header class="entete">
-  <div class="conteneur entete__interieur">
-    <a class="marque" href="index.html">Fnails<span class="marque__point">.</span>chtrx</a>
-    <nav class="nav" id="navigation" aria-label="Navigation principale">
+  <div class="ilot">
+    <a class="marque" href="index.html" aria-label="Fnails.chtrx, accueil">Fnails<span class="marque__point">.</span>chtrx</a>
+    <nav class="nav" aria-label="Navigation principale">
       <ul class="nav__liste">
         <li><a class="nav__lien" href="index.html">Accueil</a></li>
         <li><a class="nav__lien" href="prestations.html">Prestations</a></li>
@@ -36,14 +44,13 @@
         <li><a class="nav__lien" href="contact.html" aria-current="page">Contact</a></li>
       </ul>
     </nav>
-    <div class="entete__actions">
+    <div class="ilot__actions">
       <button type="button" class="bouton-icone bouton-theme" data-action="theme" aria-label="Activer le mode sombre" aria-pressed="false">
-        <svg class="icone-soleil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
-        <svg class="icone-lune" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="icone-soleil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg>
+        <svg class="icone-lune" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 13.2A8.5 8.5 0 1 1 10.8 3.5a6.6 6.6 0 0 0 9.7 9.7z"/></svg>
       </button>
-      <a class="btn btn--principal btn--petit entete__cta" href="contact.html#rdv">Prendre RDV</a>
-      <button type="button" class="bouton-menu" data-action="menu" aria-expanded="false" aria-controls="navigation" aria-label="Ouvrir le menu">
-        <span class="bouton-menu__barre"></span>
+      <a class="btn btn--petit entete__cta" href="contact.html#rdv"><span class="btn__texte">Prendre RDV</span><span class="btn__icone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
+      <button type="button" class="bouton-icone bouton-menu" data-action="menu" aria-expanded="false" aria-controls="menu" aria-label="Ouvrir le menu">
         <span class="bouton-menu__barre"></span>
         <span class="bouton-menu__barre"></span>
       </button>
@@ -51,186 +58,170 @@
   </div>
 </header>
 
+<div class="menu" id="menu" aria-label="Menu">
+  <ul class="menu__liste">
+    <li><a class="menu__lien" href="index.html"><span>01</span>Accueil</a></li>
+    <li><a class="menu__lien" href="prestations.html"><span>02</span>Prestations</a></li>
+    <li><a class="menu__lien" href="galerie.html"><span>03</span>Galerie</a></li>
+    <li><a class="menu__lien" href="a-propos.html"><span>04</span>À propos</a></li>
+    <li><a class="menu__lien" href="contact.html" aria-current="page"><span>05</span>Contact</a></li>
+  </ul>
+  <div class="menu__pied">
+    <div>71 rue de la Poste, Châteauroux<br><a href="tel:+33658811198">06 58 81 11 98</a></div>
+    <a class="btn btn--petit" href="contact.html#rdv"><span class="btn__texte">Prendre rendez-vous</span><span class="btn__icone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
+  </div>
+</div>
+
 <main id="contenu">
 
-<section class="heros">
+<section class="heros-page">
   <div class="conteneur">
-    <div class="heros__interieur">
-      <span class="surtitre">Contact</span>
-      <h1>Restons en contact</h1>
-      <p>Une question, une envie précise ? Contactez-moi ou faites votre demande de rendez-vous directement ci-dessous.</p>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="conteneur">
-    <div class="contact-grille contact-grille--simple">
-      <div>
-        <h2>Infos pratiques</h2>
-        <ul class="info-liste">
-          <li>
-            <span class="icone">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            </span>
-            <div>
-              <strong>Adresse</strong>
-              <p style="margin:0;">71 rue de la Poste, 36000 Châteauroux</p>
-            </div>
-          </li>
-          <li>
-            <span class="icone">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-            </span>
-            <div>
-              <strong>Horaires</strong>
-              <p style="margin:0;">9h-13h et 14h-19h, sur rendez-vous</p>
-            </div>
-          </li>
-          <li>
-            <span class="icone">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .3 2 .6 2.9a2 2 0 0 1-.4 2.1L8.1 9.9a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.4c.9.3 1.9.5 2.9.6a2 2 0 0 1 1.7 2z"/></svg>
-            </span>
-            <div>
-              <strong>Téléphone</strong>
-              <p style="margin:0;"><a href="tel:+33658811198">06 58 81 11 98</a></p>
-            </div>
-          </li>
-          <li>
-            <span class="icone">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-            </span>
-            <div>
-              <strong>Email</strong>
-              <p style="margin:0;"><a href="mailto:fnails.chtrx@gmail.com">fnails.chtrx@gmail.com</a></p>
-            </div>
-          </li>
-          <li>
-            <span class="icone">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-            </span>
-            <div>
-              <strong>Réseaux sociaux</strong>
-              <p style="margin:0;">
-                <a href="https://www.tiktok.com/@fnails.chtrx_" target="_blank" rel="noopener">TikTok</a>
-                · Instagram : @fnails.chtrx
-              </p>
-            </div>
-          </li>
-        </ul>
+    <div class="heros-page__grille">
+      <div class="reveal">
+        <span class="surtitre">Contact</span>
+        <h1>Restons en <em>contact</em></h1>
       </div>
+      <p class="reveal" style="--delai:0.1s">Une question, une envie précise ? Écrivez-moi, ou faites votre demande de rendez-vous directement ci-dessous.</p>
     </div>
   </div>
 </section>
 
-<section class="section section--doux" id="rdv">
-  <div class="conteneur" style="max-width:720px;">
-    <div class="entete-section" style="margin-bottom:1.5rem;">
-      <div>
+<section class="section section--serree">
+  <div class="conteneur contact">
+    <div class="contact__infos reveal">
+      <h2>Infos pratiques</h2>
+      <ul class="info-liste">
+          <li>
+            <span class="icone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.5 10c0 5.5-7.5 11.5-7.5 11.5S4.5 15.5 4.5 10a7.5 7.5 0 0 1 15 0z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
+            <div><span class="libelle">Adresse</span><p><a href="https://www.google.com/maps/search/?api=1&amp;query=71+rue+de+la+Poste+36000+Ch%C3%A2teauroux" target="_blank" rel="noopener">71 rue de la Poste, 36000 Châteauroux</a></p></div>
+          </li>
+          <li>
+            <span class="icone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M12 7.2V12l3.2 2"/></svg></span>
+            <div><span class="libelle">Horaires</span><p>9h–13h et 14h–19h, sur rendez-vous</p></div>
+          </li>
+          <li>
+            <span class="icone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.8"/><path d="M10.5 18.5h3"/></svg></span>
+            <div><span class="libelle">Téléphone</span><p><a href="tel:+33658811198">06 58 81 11 98</a></p></div>
+          </li>
+          <li>
+            <span class="icone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7 8.5 6 8.5-6"/></svg></span>
+            <div><span class="libelle">Email</span><p><a href="mailto:fnails.chtrx@gmail.com">fnails.chtrx@gmail.com</a></p></div>
+          </li>
+          <li>
+            <span class="icone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.8"/><circle cx="17" cy="7" r="0.6" fill="currentColor"/></svg></span>
+            <div><span class="libelle">Réseaux sociaux</span><p><a href="https://www.tiktok.com/@fnails.chtrx_" target="_blank" rel="noopener">TikTok @fnails.chtrx_</a> · Instagram @fnails.chtrx</p></div>
+          </li>
+      </ul>
+    </div>
+
+    <div class="formulaire coque reveal" id="rdv" style="--delai:0.1s">
+      <div class="noyau">
         <span class="surtitre">Demande de rendez-vous</span>
-        <h2>Réservez votre créneau</h2>
-        <p>
-          Remplissez le formulaire pour envoyer votre demande. Vous recevrez une
-          confirmation par téléphone ou message une fois le créneau validé.
-        </p>
+        <h2>Réservez votre <em>créneau</em></h2>
+        <p class="formulaire__intro">Remplissez le formulaire pour envoyer votre demande. Vous recevrez une confirmation par téléphone ou message une fois le créneau validé.</p>
+
+        <form id="formulaire-rdv" novalidate>
+          <div class="champ">
+            <label for="rdv-prestation">Prestation souhaitée</label>
+            <select id="rdv-prestation" name="prestation" required aria-describedby="rdv-prestation-erreur">
+            <option value="" disabled selected>Choisissez une prestation</option>
+            <optgroup label="Pose américaine">
+              <option data-duree-min="60">Pose américaine couleur uni — 35,00 €</option>
+              <option data-duree-min="60">Pose américaine french/baby boomer — 40,00 €</option>
+              <option data-duree-min="60">Pose américaine nail art niveau 1 — 45,00 €</option>
+              <option data-duree-min="60">Pose américaine nail art niveau 2 — à partir de 50,00 €</option>
+              <option data-duree-min="60">Pose américaine nail art niveau 3 — à partir de 55,00 €</option>
+              <option data-duree-min="60">Pose américaine nail art niveau 4 — à partir de 60,00 €</option>
+            </optgroup>
+            <optgroup label="Pose capsules + gel">
+              <option data-duree-min="60">Pose capsules + gel couleur uni — 40,00 €</option>
+              <option data-duree-min="60">Pose capsules + gel french/baby boomer — 45,00 €</option>
+              <option data-duree-min="60">Pose capsules + gel nail art niveau 1 — à partir de 50,00 €</option>
+              <option data-duree-min="60">Pose capsules + gel nail art niveau 2 — à partir de 55,00 €</option>
+              <option data-duree-min="60">Pose capsules + gel nail art niveau 3 — à partir de 60,00 €</option>
+              <option data-duree-min="60">Pose capsules + gel nail art niveau 4 — à partir de 65,00 €</option>
+            </optgroup>
+            <optgroup label="Gainage &amp; renforcement">
+              <option data-duree-min="60">Gainage/renforcement couleur uni — 40,00 €</option>
+              <option data-duree-min="60">Gainage/renforcement french/baby boomer — 45,00 €</option>
+            </optgroup>
+            <optgroup label="Dépose &amp; pédicure">
+              <option data-duree-min="30">Dépose — à partir de 10,00 €</option>
+              <option data-duree-min="60">Pédicure couleur uni — à partir de 30,00 €</option>
+              <option data-duree-min="60">Pédicure french — 40,00 €</option>
+            </optgroup>
+            <option data-duree-min="60" value="Autre / je ne sais pas encore">Autre / je ne sais pas encore</option>
+            </select>
+            <span class="champ__erreur" id="rdv-prestation-erreur" hidden>Choisissez une prestation.</span>
+          </div>
+
+          <div class="champ-ligne">
+          <div class="champ">
+            <label for="rdv-date">Date souhaitée</label>
+            <input type="date" id="rdv-date" name="date" required aria-describedby="rdv-date-erreur">
+            <span class="champ__erreur" id="rdv-date-erreur" hidden>Indiquez une date à venir.</span>
+          </div>
+          <div class="champ">
+            <label for="rdv-heure">Heure souhaitée</label>
+            <input type="time" id="rdv-heure" name="heure" min="09:00" max="19:00" step="900" required aria-describedby="rdv-heure-erreur">
+            <span class="champ__erreur" id="rdv-heure-erreur" hidden>Indiquez une heure entre 9h et 19h.</span>
+          </div>
+          </div>
+
+          <div class="champ-ligne">
+          <div class="champ">
+            <label for="rdv-nom">Nom</label>
+            <input type="text" id="rdv-nom" name="nom" required autocomplete="name" aria-describedby="rdv-nom-erreur">
+            <span class="champ__erreur" id="rdv-nom-erreur" hidden>Indiquez votre nom.</span>
+          </div>
+          <div class="champ">
+            <label for="rdv-telephone">Téléphone</label>
+            <input type="tel" id="rdv-telephone" name="telephone" required autocomplete="tel" pattern="[0-9+ .()-]{10,}" aria-describedby="rdv-telephone-erreur">
+            <span class="champ__erreur" id="rdv-telephone-erreur" hidden>Indiquez un numéro valide, par exemple 06 12 34 56 78.</span>
+          </div>
+          </div>
+
+          <div class="champ">
+            <label for="rdv-email">Votre email</label>
+            <input type="email" id="rdv-email" name="email" required autocomplete="email" aria-describedby="rdv-email-erreur">
+            <span class="champ__erreur" id="rdv-email-erreur" hidden>Indiquez un email valide.</span>
+          </div>
+
+          <div class="champ">
+            <label for="rdv-message">Message <small>(optionnel)</small></label>
+            <textarea id="rdv-message" name="message" rows="3" placeholder="Précisions, photo d'inspiration, contrainte d'horaire..."></textarea>
+          </div>
+
+          <input type="hidden" id="rdv-duree" name="duree_min" value="60">
+
+          <div class="formulaire__envoi">
+            <p>Le créneau reste à confirmer par le salon.</p>
+            <button type="submit" class="btn"><span class="btn__texte">Envoyer la demande</span><span class="btn__icone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button>
+          </div>
+
+          <div id="rdv-resultat" class="rdv-resultat" hidden aria-live="polite">
+            <p class="note" id="rdv-resultat-texte"></p>
+            <pre id="rdv-texte" class="rdv-texte" hidden></pre>
+            <button type="button" class="btn btn--clair btn--petit btn--simple" data-action="copier-rdv" hidden>Copier le texte</button>
+          </div>
+        </form>
       </div>
     </div>
-
-    <form id="formulaire-rdv" novalidate>
-      <div class="champ">
-        <label for="rdv-prestation">Prestation souhaitée</label>
-        <select id="rdv-prestation" name="prestation" required>
-          <option value="" disabled selected>Choisissez une prestation</option>
-          <optgroup label="Pose américaine">
-            <option data-duree-min="60">Pose américaine couleur uni — 35,00 €</option>
-            <option data-duree-min="60">Pose américaine french/baby boomer — 40,00 €</option>
-            <option data-duree-min="60">Pose américaine nail art niveau 1 — 45,00 €</option>
-            <option data-duree-min="60">Pose américaine nail art niveau 2 — à partir de 50,00 €</option>
-            <option data-duree-min="60">Pose américaine nail art niveau 3 — à partir de 55,00 €</option>
-            <option data-duree-min="60">Pose américaine nail art niveau 4 — à partir de 60,00 €</option>
-          </optgroup>
-          <optgroup label="Pose capsules + gel">
-            <option data-duree-min="60">Pose capsules + gel couleur uni — 40,00 €</option>
-            <option data-duree-min="60">Pose capsules + gel french/baby boomer — 45,00 €</option>
-            <option data-duree-min="60">Pose capsules + gel nail art niveau 1 — à partir de 50,00 €</option>
-            <option data-duree-min="60">Pose capsules + gel nail art niveau 2 — à partir de 55,00 €</option>
-            <option data-duree-min="60">Pose capsules + gel nail art niveau 3 — à partir de 60,00 €</option>
-            <option data-duree-min="60">Pose capsules + gel nail art niveau 4 — à partir de 65,00 €</option>
-          </optgroup>
-          <optgroup label="Gainage &amp; renforcement">
-            <option data-duree-min="60">Gainage/renforcement couleur uni — 40,00 €</option>
-            <option data-duree-min="60">Gainage/renforcement french/baby boomer — 45,00 €</option>
-          </optgroup>
-          <optgroup label="Dépose &amp; pédicure">
-            <option data-duree-min="30">Dépose — à partir de 10,00 €</option>
-            <option data-duree-min="60">Pédicure couleur uni — à partir de 30,00 €</option>
-            <option data-duree-min="60">Pédicure french — 40,00 €</option>
-          </optgroup>
-          <option data-duree-min="60" value="Autre / je ne sais pas encore">Autre / je ne sais pas encore</option>
-        </select>
-      </div>
-
-      <div class="champ-ligne">
-        <div class="champ">
-          <label for="rdv-date">Date souhaitée</label>
-          <input type="date" id="rdv-date" name="date" required>
-        </div>
-        <div class="champ">
-          <label for="rdv-heure">Heure souhaitée</label>
-          <input type="time" id="rdv-heure" name="heure" required>
-        </div>
-      </div>
-
-      <div class="champ-ligne">
-        <div class="champ">
-          <label for="rdv-nom">Nom</label>
-          <input type="text" id="rdv-nom" name="nom" required autocomplete="name">
-        </div>
-        <div class="champ">
-          <label for="rdv-telephone">Téléphone</label>
-          <input type="tel" id="rdv-telephone" name="telephone" required autocomplete="tel">
-        </div>
-      </div>
-
-      <div class="champ">
-        <label for="rdv-email">Votre email</label>
-        <input type="email" id="rdv-email" name="email" required autocomplete="email">
-      </div>
-
-      <div class="champ">
-        <label for="rdv-message">Message (optionnel)</label>
-        <textarea id="rdv-message" name="message" rows="3" placeholder="Précisions, photo d'inspiration, contrainte d'horaire..."></textarea>
-      </div>
-
-      <input type="hidden" id="rdv-duree" name="duree_min" value="60">
-
-      <button type="submit" class="btn btn--principal">Envoyer la demande</button>
-
-      <div id="rdv-resultat" class="rdv-resultat" hidden>
-        <p class="encadre-note" id="rdv-resultat-texte"></p>
-        <pre id="rdv-texte" class="rdv-texte" hidden></pre>
-        <button type="button" class="btn btn--secondaire btn--petit" data-action="copier-rdv" hidden>Copier le texte</button>
-      </div>
-    </form>
   </div>
 </section>
-
 </main>
 
 <footer class="pied">
   <div class="conteneur">
     <div class="pied__grille">
       <div>
-        <div class="pied__marque">Fnails.chtrx</div>
-        <p>Onglerie à Châteauroux. Pose gel, pose américaine, gainage, nail art et soin des pieds, sur rendez-vous.</p>
+        <p>Onglerie à Châteauroux. Pose américaine, capsules + gel, gainage, nail art et pédicure, sur rendez-vous.</p>
         <div class="pied__reseaux">
-          <a href="https://www.tiktok.com/@fnails.chtrx_" target="_blank" rel="noopener" aria-label="TikTok Fnails.chtrx">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 3c.4 2.2 1.9 3.9 4.2 4.2v3c-1.5 0-3-.4-4.2-1.2v6.4a5.4 5.4 0 1 1-5.4-5.4c.3 0 .6 0 .9.1v3.1a2.3 2.3 0 1 0 1.7 2.2V3h2.8z"/></svg>
-          </a>
+          <a href="https://www.tiktok.com/@fnails.chtrx_" target="_blank" rel="noopener" aria-label="TikTok Fnails.chtrx"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 3c.4 2.2 1.9 3.9 4.2 4.2v3c-1.5 0-3-.4-4.2-1.2v6.4a5.4 5.4 0 1 1-5.4-5.4c.3 0 .6 0 .9.1v3.1a2.3 2.3 0 1 0 1.7 2.2V3h2.8z"/></svg></a>
         </div>
       </div>
       <div>
-        <h3>Navigation</h3>
+        <h2>Le site</h2>
         <ul>
           <li><a href="prestations.html">Prestations &amp; tarifs</a></li>
           <li><a href="galerie.html">Galerie</a></li>
@@ -239,23 +230,26 @@
         </ul>
       </div>
       <div>
-        <h3>Infos pratiques</h3>
+        <h2>Le salon</h2>
         <ul>
-          <li>71 rue de la Poste, 36000 Châteauroux</li>
+          <li>71 rue de la Poste<br>36000 Châteauroux</li>
           <li><a href="tel:+33658811198">06 58 81 11 98</a></li>
-          <li>9h-13h et 14h-19h, sur rendez-vous</li>
+          <li>9h–13h · 14h–19h, sur rendez-vous</li>
           <li><a href="contact.html#rdv">Réserver en ligne</a></li>
         </ul>
       </div>
     </div>
+    <p class="pied__signature" aria-hidden="true">Fnails<em>.</em>chtrx</p>
     <div class="pied__bas">
-      <span>© <span data-annee>2026</span> Fnails.chtrx</span>
+      <span>© <span data-annee>2026</span> Fnails.chtrx · SIRET 943 481 648 00013</span>
       <ul>
         <li><a href="mentions-legales.html">Mentions légales</a></li>
-        <li><a href="contact.html">Nous écrire</a></li>
+        <li><a href="mailto:fnails.chtrx@gmail.com">fnails.chtrx@gmail.com</a></li>
       </ul>
     </div>
   </div>
 </footer>
 
 <script src="assets/js/app.js" defer></script>
+</body>
+</html>

@@ -8,21 +8,52 @@
   // Adresse à laquelle les demandes sont envoyées en mode "mailto" de secours.
   var RDV_EMAIL = "fnails.chtrx@gmail.com";
 
+  // ===== Menu plein écran (mobile) =====
   var boutonMenu = document.querySelector("[data-action='menu']");
-  var nav = document.getElementById("navigation");
+  var menu = document.getElementById("menu");
 
-  if (boutonMenu && nav) {
+  if (boutonMenu && menu) {
+    var basculerMenu = function (ouvrir) {
+      menu.classList.toggle("ouvert", ouvrir);
+      document.body.classList.toggle("menu-ouvert", ouvrir);
+      boutonMenu.setAttribute("aria-expanded", ouvrir ? "true" : "false");
+      boutonMenu.setAttribute("aria-label", ouvrir ? "Fermer le menu" : "Ouvrir le menu");
+    };
+
     boutonMenu.addEventListener("click", function () {
-      var ouvert = nav.classList.toggle("ouvert");
-      boutonMenu.setAttribute("aria-expanded", ouvert ? "true" : "false");
+      basculerMenu(!menu.classList.contains("ouvert"));
     });
 
-    nav.querySelectorAll("a").forEach(function (lien) {
-      lien.addEventListener("click", function () {
-        nav.classList.remove("ouvert");
-        boutonMenu.setAttribute("aria-expanded", "false");
-      });
+    menu.querySelectorAll("a").forEach(function (lien) {
+      lien.addEventListener("click", function () { basculerMenu(false); });
     });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && menu.classList.contains("ouvert")) {
+        basculerMenu(false);
+        boutonMenu.focus();
+      }
+    });
+
+    window.matchMedia("(min-width: 1081px)").addEventListener("change", function (mq) {
+      if (mq.matches) { basculerMenu(false); }
+    });
+  }
+
+  // ===== Apparitions au défilement =====
+  var aReveler = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window) {
+    var observateur = new IntersectionObserver(function (entrees) {
+      entrees.forEach(function (entree) {
+        if (entree.isIntersecting) {
+          entree.target.classList.add("visible");
+          observateur.unobserve(entree.target);
+        }
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+    aReveler.forEach(function (el) { observateur.observe(el); });
+  } else {
+    aReveler.forEach(function (el) { el.classList.add("visible"); });
   }
 
   document.querySelectorAll("[data-annee]").forEach(function (el) {
@@ -55,6 +86,34 @@
     var zoneTexte = document.getElementById("rdv-texte");
     var boutonCopier = document.querySelector("[data-action='copier-rdv']");
     var boutonEnvoyer = formulaireRdv.querySelector("button[type='submit']");
+    var libelleEnvoyer = boutonEnvoyer.querySelector(".btn__texte") || boutonEnvoyer;
+    var champDate = document.getElementById("rdv-date");
+
+    // Pas de rendez-vous dans le passé
+    var aujourdhui = new Date();
+    aujourdhui.setMinutes(aujourdhui.getMinutes() - aujourdhui.getTimezoneOffset());
+    champDate.min = aujourdhui.toISOString().slice(0, 10);
+
+    // Validation en ligne : message sous le champ, pas d'alerte
+    var champsRequis = formulaireRdv.querySelectorAll("[required]");
+    var verifierChamp = function (champ) {
+      var valide = champ.checkValidity();
+      var bloc = champ.closest(".champ");
+      var erreur = document.getElementById(champ.id + "-erreur");
+      if (bloc) { bloc.classList.toggle("champ--erreur", !valide); }
+      if (erreur) { erreur.hidden = valide; }
+      champ.setAttribute("aria-invalid", valide ? "false" : "true");
+      return valide;
+    };
+    champsRequis.forEach(function (champ) {
+      champ.addEventListener("blur", function () { if (champ.value) { verifierChamp(champ); } });
+      champ.addEventListener("input", function () {
+        if (champ.getAttribute("aria-invalid") === "true") { verifierChamp(champ); }
+      });
+      champ.addEventListener("change", function () {
+        if (champ.getAttribute("aria-invalid") === "true") { verifierChamp(champ); }
+      });
+    });
 
     champPrestation.addEventListener("change", function () {
       var option = champPrestation.options[champPrestation.selectedIndex];
@@ -83,6 +142,15 @@
     formulaireRdv.addEventListener("submit", function (e) {
       e.preventDefault();
 
+      var premierInvalide = null;
+      champsRequis.forEach(function (champ) {
+        if (!verifierChamp(champ) && !premierInvalide) { premierInvalide = champ; }
+      });
+      if (premierInvalide) {
+        premierInvalide.focus();
+        return;
+      }
+
       var d = {
         prestation: champPrestation.value,
         date: document.getElementById("rdv-date").value,
@@ -99,7 +167,7 @@
         // Google Apps Script et on attend sa réponse pour savoir si le
         // créneau était libre avant d'afficher une confirmation.
         boutonEnvoyer.disabled = true;
-        boutonEnvoyer.textContent = "Envoi en cours...";
+        libelleEnvoyer.textContent = "Envoi en cours...";
         zoneTexte.hidden = true;
         boutonCopier.hidden = true;
 
@@ -134,7 +202,7 @@
           })
           .then(function () {
             boutonEnvoyer.disabled = false;
-            boutonEnvoyer.textContent = "Envoyer la demande";
+            libelleEnvoyer.textContent = "Envoyer la demande";
           });
 
         return;
@@ -174,7 +242,7 @@
         var texte = zoneTexte.textContent;
         var apresCopie = function () {
           var original = boutonCopier.textContent;
-          boutonCopier.textContent = "Copié !";
+          boutonCopier.textContent = "Copié";
           setTimeout(function () { boutonCopier.textContent = original; }, 2000);
         };
         if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -194,53 +262,6 @@
       selection.removeAllRanges();
       selection.addRange(plage);
     };
-  }
-
-  var piste = document.querySelector("[data-piste]");
-  if (piste) {
-    var pasDefilement = function () {
-      var premiere = piste.querySelector(".carte");
-      if (!premiere) { return 280; }
-      var style = window.getComputedStyle(piste);
-      return premiere.getBoundingClientRect().width + parseFloat(style.columnGap || style.gap || 24);
-    };
-
-    var defiler = function (sens) {
-      var max = piste.scrollWidth - piste.clientWidth;
-      var cible = piste.scrollLeft + sens * pasDefilement();
-      if (cible >= max - 4) {
-        cible = 0;
-      } else if (cible < 0) {
-        cible = max;
-      }
-      piste.scrollTo({ left: cible, behavior: "smooth" });
-    };
-
-    var minuteur = null;
-    var reduireMouvement = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    var demarrerAuto = function () {
-      if (reduireMouvement || minuteur) { return; }
-      minuteur = setInterval(function () { defiler(1); }, 3500);
-    };
-    var arreterAuto = function () {
-      clearInterval(minuteur);
-      minuteur = null;
-    };
-    var relancerAuto = function () { arreterAuto(); demarrerAuto(); };
-
-    var precedent = document.querySelector("[data-action='carrousel-prec']");
-    var suivant = document.querySelector("[data-action='carrousel-suiv']");
-    if (precedent) { precedent.addEventListener("click", function () { defiler(-1); relancerAuto(); }); }
-    if (suivant) { suivant.addEventListener("click", function () { defiler(1); relancerAuto(); }); }
-
-    piste.addEventListener("mouseenter", arreterAuto);
-    piste.addEventListener("mouseleave", demarrerAuto);
-    piste.addEventListener("touchstart", arreterAuto, { passive: true });
-    piste.addEventListener("focusin", arreterAuto);
-    piste.addEventListener("focusout", demarrerAuto);
-
-    demarrerAuto();
   }
 
   var diaporama = document.querySelector("[data-diaporama]");
