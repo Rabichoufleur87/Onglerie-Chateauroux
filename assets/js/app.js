@@ -173,7 +173,11 @@
 
         var donnees = new URLSearchParams(d);
 
-        fetch(RDV_WEBAPP_URL, { method: "POST", body: donnees })
+        // Requête GET plutôt que POST : les Web Apps Google Apps Script
+        // renvoient de façon fiable les en-têtes CORS nécessaires en GET,
+        // ce qui n'est pas garanti en POST (le navigateur bloque alors la
+        // lecture de la réponse malgré une demande correctement reçue).
+        fetch(RDV_WEBAPP_URL + "?" + donnees.toString())
           .then(function (reponseHttp) { return reponseHttp.json(); })
           .then(function (resultatJson) {
             if (resultatJson && resultatJson.ok) {
