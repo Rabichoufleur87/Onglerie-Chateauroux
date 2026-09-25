@@ -42,6 +42,10 @@ fonctionnement, contrôlés par la constante `RDV_WEBAPP_URL` en haut de
   téléphone, email du client) dans l'agenda Google Calendar. Si le créneau
   vient d'être pris par quelqu'un d'autre, le client voit un message et doit
   choisir un autre horaire — impossible de doubler un rendez-vous.
+  Dans ce mode, chaque demande acceptée déclenche aussi deux emails
+  automatiques (envoyés via Gmail, gratuitement, par `Code.gs`) :
+  un email de confirmation au client, et un email de notification à la
+  gérante (adresse réglée dans `EMAIL_PATRON` en haut de `Code.gs`).
 
 ### Activer la création automatique dans Google Calendar
 

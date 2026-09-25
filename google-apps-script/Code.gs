@@ -1,7 +1,8 @@
 /**
  * Fnails.chtrx — réception des demandes de rendez-vous du site,
- * création automatique de l'événement dans Google Calendar, et
- * email de confirmation envoyé au client.
+ * création automatique de l'événement dans Google Calendar, email
+ * de confirmation envoyé au client, et email de notification envoyé
+ * à la gérante (EMAIL_PATRON).
  *
  * Installation (voir aussi README.md à la racine du dépôt) :
  * 1. Aller sur https://script.google.com et créer un nouveau projet,
@@ -16,9 +17,11 @@
  * 6. Coller cette URL dans assets/js/app.js, dans la constante
  *    RDV_WEBAPP_URL en haut du fichier.
  *
- * L'email de confirmation est envoyé gratuitement via Gmail (MailApp),
- * sans aucun compte ni service tiers — juste le compte Google déjà
- * utilisé pour le script.
+ * Les deux emails (client + gérante) sont envoyés gratuitement via Gmail
+ * (MailApp), sans aucun compte ni service tiers — juste le compte Google
+ * déjà utilisé pour le script. L'adresse de la gérante est réglée dans
+ * la constante EMAIL_PATRON ci-dessous (par défaut la même adresse que
+ * RDV_EMAIL dans assets/js/app.js).
  *
  * Chaque nouvelle demande de rendez-vous vérifie d'abord qu'aucun
  * événement n'existe déjà sur le créneau demandé, puis crée l'événement
@@ -28,6 +31,10 @@
  */
 
 var CALENDAR_ID = "primary"; // "primary" = l'agenda principal de ce compte Google
+
+// Adresse recevant un email de notification pour chaque nouvelle demande de RDV
+// (la gérante). Même adresse que RDV_EMAIL dans assets/js/app.js.
+var EMAIL_PATRON = "fnails.chtrx@gmail.com";
 
 // Horaires d'ouverture, utilisés à la fois pour vérifier les demandes et
 // pour proposer les créneaux disponibles dans le formulaire.
@@ -95,6 +102,7 @@ function traiterDemande(e) {
     agenda.createEvent(titre, debut, fin, { description: description });
 
     envoyerEmailConfirmation(p);
+    envoyerEmailPatron(p);
 
     return reponse({ ok: true });
   } finally {
@@ -250,6 +258,39 @@ function envoyerEmailConfirmation(p) {
 
   try {
     MailApp.sendEmail(p.email, sujet, corps);
+  } catch (erreur) {
+    // L'email a échoué : le rendez-vous reste créé, on n'interrompt rien.
+  }
+}
+
+function envoyerEmailPatron(p) {
+  if (!EMAIL_PATRON) {
+    return;
+  }
+
+  var morceauxDate = String(p.date).split("-");
+  var dateAffichee = morceauxDate.length === 3
+    ? morceauxDate[2] + "/" + morceauxDate[1] + "/" + morceauxDate[0]
+    : p.date;
+
+  var sujet = "Nouveau RDV — " + p.prestation + " — " + p.nom;
+  var corps = [
+    "Nouvelle demande de rendez-vous reçue via le site :",
+    "",
+    "Prestation : " + p.prestation,
+    "Date : " + dateAffichee,
+    "Heure : " + p.heure,
+    "",
+    "Client : " + p.nom,
+    "Téléphone : " + p.telephone,
+    "Email : " + p.email,
+    "Message : " + (p.message || "—"),
+    "",
+    "L'événement a déjà été ajouté à l'agenda Google Calendar."
+  ].join("\n");
+
+  try {
+    MailApp.sendEmail(EMAIL_PATRON, sujet, corps);
   } catch (erreur) {
     // L'email a échoué : le rendez-vous reste créé, on n'interrompt rien.
   }
