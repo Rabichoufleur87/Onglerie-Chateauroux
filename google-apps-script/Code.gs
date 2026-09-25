@@ -1,33 +1,41 @@
 /**
  * Fnails.chtrx — réception des demandes de rendez-vous du site,
- * création automatique de l'événement dans Google Calendar, et
- * email de confirmation envoyé au client.
+ * création automatique de l'événement dans Google Calendar, email de
+ * confirmation envoyé au client, et email de notification envoyé au salon.
  *
  * Installation (voir aussi README.md à la racine du dépôt) :
  * 1. Aller sur https://script.google.com et créer un nouveau projet,
- *    avec le compte Google dont l'agenda doit recevoir les rendez-vous.
+ *    avec le compte Google dont l'agenda doit recevoir les rendez-vous
+ *    (l'événement est créé dans l'agenda "primary" de ce compte-là,
+ *    donc c'est important que ce soit le bon compte).
  * 2. Remplacer tout le contenu de Code.gs par ce fichier.
- * 3. Menu Déployer > Nouveau déploiement.
+ * 3. Vérifier/adapter EMAIL_PATRON ci-dessous si besoin.
+ * 4. Menu Déployer > Nouveau déploiement.
  *    - Type : Application Web.
  *    - Exécuter en tant que : Moi.
  *    - Qui a accès : Tout le monde.
- * 4. Autoriser l'accès demandé (c'est votre propre compte Google).
- * 5. Copier l'URL du Web App affichée après le déploiement.
- * 6. Coller cette URL dans assets/js/app.js, dans la constante
+ * 5. Autoriser l'accès demandé (c'est votre propre compte Google).
+ * 6. Copier l'URL du Web App affichée après le déploiement.
+ * 7. Coller cette URL dans assets/js/app.js, dans la constante
  *    RDV_WEBAPP_URL en haut du fichier.
  *
- * L'email de confirmation est envoyé gratuitement via Gmail (MailApp),
- * sans aucun compte ni service tiers — juste le compte Google déjà
- * utilisé pour le script.
+ * Les emails sont envoyés gratuitement via Gmail (MailApp), sans aucun
+ * compte ni service tiers — juste le compte Google déjà utilisé pour
+ * le script.
  *
  * Chaque nouvelle demande de rendez-vous vérifie d'abord qu'aucun
  * événement n'existe déjà sur le créneau demandé, puis crée l'événement
- * (prestation, nom, téléphone, email du client) dans l'agenda. Un verrou
- * évite que deux demandes envoyées au même moment ne passent toutes les
- * deux la vérification.
+ * (prestation, nom, téléphone, email du client) dans l'agenda, envoie un
+ * email de confirmation au client et un email de notification au salon
+ * (EMAIL_PATRON). Un verrou évite que deux demandes envoyées au même
+ * moment ne passent toutes les deux la vérification.
  */
 
 var CALENDAR_ID = "primary"; // "primary" = l'agenda principal de ce compte Google
+
+// Adresse du salon : reçoit un email à chaque nouvelle demande de RDV.
+// À changer ici si besoin, sans toucher au reste du script.
+var EMAIL_PATRON = "fnails.chtrx@gmail.com";
 
 // Horaires d'ouverture, utilisés à la fois pour vérifier les demandes et
 // pour proposer les créneaux disponibles dans le formulaire.
@@ -95,6 +103,7 @@ function traiterDemande(e) {
     agenda.createEvent(titre, debut, fin, { description: description });
 
     envoyerEmailConfirmation(p);
+    envoyerEmailPatron(p);
 
     return reponse({ ok: true });
   } finally {
@@ -250,6 +259,41 @@ function envoyerEmailConfirmation(p) {
 
   try {
     MailApp.sendEmail(p.email, sujet, corps);
+  } catch (erreur) {
+    // L'email a échoué : le rendez-vous reste créé, on n'interrompt rien.
+  }
+}
+
+// Prévient le salon par email à chaque nouvelle demande, en plus de
+// l'événement déjà créé dans l'agenda.
+function envoyerEmailPatron(p) {
+  if (!EMAIL_PATRON) {
+    return;
+  }
+
+  var morceauxDate = String(p.date).split("-");
+  var dateAffichee = morceauxDate.length === 3
+    ? morceauxDate[2] + "/" + morceauxDate[1] + "/" + morceauxDate[0]
+    : p.date;
+
+  var sujet = p.nom + " a pris RDV le " + dateAffichee + " à " + p.heure;
+  var corps = [
+    "Nouvelle demande de rendez-vous reçue via le site :",
+    "",
+    "Prestation : " + p.prestation,
+    "Date : " + dateAffichee,
+    "Heure : " + p.heure,
+    "",
+    "Cliente/client : " + p.nom,
+    "Téléphone : " + p.telephone,
+    "Email : " + p.email,
+    "Message : " + (p.message || "—"),
+    "",
+    "L'événement a aussi été ajouté directement dans l'agenda."
+  ].join("\n");
+
+  try {
+    MailApp.sendEmail(EMAIL_PATRON, sujet, corps);
   } catch (erreur) {
     // L'email a échoué : le rendez-vous reste créé, on n'interrompt rien.
   }
