@@ -1263,3 +1263,115 @@ button.btn[disabled] { opacity: 0.6; cursor: progress; }
 .prose__sommaire a:hover { color: var(--accent); }
 .prose h2 { scroll-margin-top: 6rem; }
 .prose__maj { font-size: 0.85rem; color: var(--encre-pale); }
+
+/* ===== Version mobile ===== */
+
+/* Points du diaporama : barre fine, mais zone tactile de 24 px de haut */
+.diaporama__points button {
+  position: relative;
+  height: 1.5rem;
+  background: transparent !important;
+}
+.diaporama__points button::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 3px;
+  margin-top: -1.5px;
+  border-radius: 3px;
+  background: var(--ligne-forte);
+  transition: background-color 0.4s var(--ease);
+}
+.diaporama__points button:hover::before { background: var(--encre-pale); }
+.diaporama__points button.active::before { background: var(--accent); }
+
+/* Barre d'action fixe en bas de l'écran (téléphone uniquement) */
+.barre-mobile { display: none; }
+
+@media (max-width: 767px) {
+  body { padding-bottom: calc(5.25rem + env(safe-area-inset-bottom)); }
+  body.page-contact { padding-bottom: 0; }
+
+  .barre-mobile {
+    position: fixed;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: max(0.75rem, env(safe-area-inset-bottom));
+    z-index: var(--z-nav);
+    display: flex;
+    gap: 0.4rem;
+    padding: 0.4rem;
+    border-radius: 999px;
+    background: var(--verre);
+    -webkit-backdrop-filter: blur(22px) saturate(1.4);
+    backdrop-filter: blur(22px) saturate(1.4);
+    box-shadow: inset 0 0 0 1px var(--ligne), var(--reflet), var(--ombre);
+    transition: transform 0.6s var(--ease), opacity 0.4s var(--ease);
+  }
+  .barre-mobile .btn { flex: 1; min-width: 0; justify-content: space-between; min-height: 3rem; }
+  .barre-mobile .btn--appel { flex: 0 0 auto; justify-content: center; padding: 0 1.1rem; gap: 0.5rem; }
+  .barre-mobile .btn--appel svg { width: 1.05rem; height: 1.05rem; }
+  body.menu-ouvert .barre-mobile { transform: translateY(150%); opacity: 0; }
+
+  /* Rythme vertical plus serré */
+  .section { padding: 4rem 0 4.5rem; }
+  .section--serree { padding-top: 2rem; }
+  .heros { padding-top: 7rem; padding-bottom: 3rem; }
+  .heros__texte > p { margin-bottom: 2rem; }
+  .heros__infos { margin-top: 2.5rem; }
+  .heros-page { padding-top: 7.5rem; padding-bottom: 2.5rem; }
+  .entete-section { margin-bottom: 2.25rem; }
+  .compteur { margin: 1.75rem 0; }
+  .fiche { margin: 2rem 0; }
+  .realisations, .duo { gap: 2.75rem; }
+
+  /* Apparitions plus rapides et plus courtes */
+  .js .reveal { transform: translateY(1.25rem); transition-duration: 0.7s, 0.8s; }
+
+  /* Petites étiquettes lisibles (12 px) */
+  .surtitre, .heros__infos span, .fiche span, .info-liste span.libelle, .champ label small,
+  .tuile__num, .pied h2, .tarifs__tete span, .tarifs__prix small { font-size: 0.75rem; }
+
+  /* Zones tactiles d'au moins 44 px */
+  .lien-fleche { padding: 0.7rem 0; background-position: 0 calc(100% - 0.6rem); }
+  .heros__infos a, .fiche a, .info-liste a { display: inline-block; padding: 0.35rem 0; }
+  .pied ul { gap: 0; }
+  .pied ul a { display: inline-block; padding: 0.55rem 0; }
+  .pied ul li:not(:has(a)) { padding: 0.55rem 0; }
+  .pied__bas { flex-direction: column; gap: 0.5rem; }
+  .pied__bas ul { flex-wrap: wrap; gap: 0 1.5rem; }
+
+  /* Tuiles de prestations plus compactes */
+  .tuile__haut { margin-bottom: 1.75rem; }
+  .tuile--mixte .tuile__haut { margin-bottom: 1.25rem; }
+  .tuile__vignette { width: 38%; min-height: 10rem; }
+
+  .tarifs__tete { flex-wrap: wrap; gap: 0.25rem 1rem; }
+  .tarifs__ligne { gap: 0.75rem; align-items: center; }
+  /* « à partir de » au-dessus du prix, pour laisser la place au nom */
+  .tarifs__prix { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.15; }
+  .tarifs__prix small { margin: 0 0 0.15rem; }
+
+  /* Tableau de la politique de confidentialité : une fiche par ligne */
+  .prose table, .prose tbody, .prose tr, .prose td { display: block; }
+  .prose thead { display: none; }
+  .prose tr { padding: 1rem 0; border-top: 1px solid var(--ligne); }
+  .prose td { padding: 0.2rem 0; border: 0; }
+  .prose td::before {
+    content: attr(data-libelle);
+    display: block;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--encre-pale);
+  }
+}
+
+@media (max-width: 359px) {
+  :root { --gouttiere: 0.9rem; }
+  .marque { font-size: 1.1rem; margin-right: 0.25rem; }
+  .ilot { padding-left: 1rem; }
+  .barre-mobile .btn--appel .btn__texte { display: none; }
+}
