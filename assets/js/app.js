@@ -151,6 +151,15 @@
         return;
       }
 
+      // Champ piège rempli = robot : on fait comme si tout allait bien,
+      // sans rien envoyer (le robot n'apprend pas qu'il a été repéré).
+      var piege = document.getElementById("rdv-site");
+      if (piege && piege.value) {
+        afficherResultat("Votre demande a bien été prise en compte.", true);
+        formulaireRdv.reset();
+        return;
+      }
+
       var d = {
         prestation: champPrestation.value,
         date: document.getElementById("rdv-date").value,
@@ -189,6 +198,16 @@
             } else if (resultatJson && resultatJson.raison === "conflit") {
               afficherResultat(
                 "Ce créneau vient d'être réservé par quelqu'un d'autre. Merci de choisir une autre date ou un autre horaire.",
+                false
+              );
+            } else if (resultatJson && resultatJson.raison === "limite") {
+              afficherResultat(
+                "Plusieurs demandes ont déjà été envoyées récemment. Merci de patienter un peu, ou de nous appeler au 06 58 81 11 98.",
+                false
+              );
+            } else if (resultatJson && resultatJson.raison === "invalide") {
+              afficherResultat(
+                "Certaines informations n'ont pas été acceptées (date passée, horaire hors ouverture ou champ trop long). Merci de vérifier le formulaire.",
                 false
               );
             } else {

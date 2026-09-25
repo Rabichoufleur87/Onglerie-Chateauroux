@@ -2,6 +2,31 @@
    Direction : luxe éditorial. Crème chaud / expresso, un seul accent rose poudré,
    serif Fraunces pour les titres, Plus Jakarta Sans pour le texte. */
 
+/* Polices hébergées sur le site (licence OFL, voir assets/fonts/) :
+   aucune requête vers Google au chargement, donc pas de transfert de
+   l'adresse IP des visiteuses. */
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 300 500;
+  font-display: swap;
+  src: url("../fonts/fraunces.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Fraunces";
+  font-style: italic;
+  font-weight: 300 500;
+  font-display: swap;
+  src: url("../fonts/fraunces-italique.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("../fonts/plus-jakarta-sans.woff2") format("woff2");
+}
+
 :root {
   color-scheme: light;
   --fond: #f5efe8;
@@ -1200,3 +1225,41 @@ button.btn[disabled] { opacity: 0.6; cursor: progress; }
   .js .reveal { opacity: 1; transform: none; }
   .defilant__piste { animation: none; }
 }
+
+/* ===== Sécurité & légal ===== */
+/* Champ piège anti-robots : hors écran, jamais visible ni atteignable au clavier */
+.piege {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.mention-rgpd { margin: 0; max-width: none; font-size: 0.78rem; line-height: 1.55; color: var(--encre-pale); }
+.mention-rgpd a { color: var(--encre-douce); text-underline-offset: 2px; }
+.a-completer {
+  padding: 0.05rem 0.4rem;
+  border-radius: 0.35rem;
+  background: var(--accent-doux);
+  color: var(--encre);
+  font-weight: 600;
+}
+.prose ul { padding-left: 1.2rem; color: var(--encre-douce); }
+.prose li { margin-bottom: 0.4rem; }
+.prose table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin: 0 0 1.5rem; }
+.prose th, .prose td { text-align: left; vertical-align: top; padding: 0.75rem 0.75rem 0.75rem 0; border-top: 1px solid var(--ligne); color: var(--encre-douce); }
+.prose th { color: var(--encre); font-weight: 600; }
+.prose__sommaire { display: flex; flex-wrap: wrap; gap: 0.5rem; list-style: none; padding: 0 !important; margin: 0 0 3rem; }
+.prose__sommaire a {
+  display: inline-block;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  background: var(--coque);
+  box-shadow: inset 0 0 0 1px var(--ligne);
+  font-size: 0.82rem;
+  text-decoration: none;
+  color: var(--encre-douce);
+}
+.prose__sommaire a:hover { color: var(--accent); }
+.prose h2 { scroll-margin-top: 6rem; }
+.prose__maj { font-size: 0.85rem; color: var(--encre-pale); }

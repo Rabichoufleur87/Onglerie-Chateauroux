@@ -47,9 +47,17 @@ function traiterDemande(e) {
   }
 
   try {
-    var p = e.parameter;
+    // Le Web App est public : tout ce qui arrive est vérifié ici, côté
+    // serveur, car les contrôles du formulaire peuvent être contournés.
+    if (tropDeDemandes(e.parameter)) {
+      return reponse({ ok: false, raison: "limite" });
+    }
+    var p = validerDemande(e.parameter);
+    if (!p) {
+      return reponse({ ok: false, raison: "invalide" });
+    }
 
-    var duree = parseInt(p.duree_min, 10) || 60;
+    var duree = p.duree_min;
     var debut = new Date(p.date + "T" + p.heure + ":00");
     var fin = new Date(debut.getTime() + duree * 60000);
 
@@ -79,6 +87,84 @@ function traiterDemande(e) {
   } finally {
     verrou.releaseLock();
   }
+}
+
+// ===== Sécurité =====
+
+var LIMITES = {
+  longueurs: { prestation: 150, nom: 80, telephone: 20, email: 120, message: 1000 },
+  joursMaxAVenir: 180,
+  heureOuverture: "09:00",
+  heureFermeture: "19:00",
+  demandesParEmailParHeure: 3,
+  demandesTotalesPar10Min: 20
+};
+
+// Retire les caractères de contrôle et, pour les champs sur une ligne,
+// les retours à la ligne (évite de fausser le texte de l'agenda/de l'email).
+function nettoyer(valeur, longueurMax, surUneLigne) {
+  var texte = String(valeur || "").replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "");
+  if (surUneLigne) { texte = texte.replace(/[\r\n\t]+/g, " "); }
+  texte = texte.trim();
+  return texte.length > longueurMax ? null : texte;
+}
+
+// Renvoie une demande propre, ou null si quelque chose ne va pas.
+function validerDemande(brut) {
+  if (!brut) { return null; }
+
+  // Champ piège du formulaire : invisible pour les humains, rempli par les robots.
+  if (brut.site_web) { return null; }
+
+  var L = LIMITES.longueurs;
+  var p = {
+    prestation: nettoyer(brut.prestation, L.prestation, true),
+    nom: nettoyer(brut.nom, L.nom, true),
+    telephone: nettoyer(brut.telephone, L.telephone, true),
+    email: nettoyer(brut.email, L.email, true),
+    message: nettoyer(brut.message, L.message, false),
+    date: String(brut.date || ""),
+    heure: String(brut.heure || ""),
+    duree_min: parseInt(brut.duree_min, 10) || 60
+  };
+
+  if (!p.prestation || !p.nom || !p.telephone || !p.email || p.message === null) { return null; }
+  if (p.nom.length < 2) { return null; }
+  // Pas de lien dans le nom : il est repris dans l'email envoyé au client,
+  // un lien y servirait à faire passer un message piégé pour le salon.
+  if (/https?:|www\.|\.[a-z]{2,}\//i.test(p.nom)) { return null; }
+  if (!/^[0-9+ .()\-]{10,20}$/.test(p.telephone)) { return null; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(p.email)) { return null; }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(p.date)) { return null; }
+  if (!/^\d{2}:\d{2}$/.test(p.heure)) { return null; }
+  if (p.heure < LIMITES.heureOuverture || p.heure > LIMITES.heureFermeture) { return null; }
+  if (p.duree_min < 15 || p.duree_min > 240) { return null; }
+
+  var debut = new Date(p.date + "T" + p.heure + ":00");
+  if (isNaN(debut.getTime())) { return null; }
+  var maintenant = new Date();
+  if (debut < maintenant) { return null; }
+  if (debut - maintenant > LIMITES.joursMaxAVenir * 24 * 3600 * 1000) { return null; }
+
+  return p;
+}
+
+// Limite le nombre de demandes (anti-spam) : par adresse email et au total.
+function tropDeDemandes(brut) {
+  var cache = CacheService.getScriptCache();
+  var email = String((brut && brut.email) || "").toLowerCase().slice(0, 120);
+
+  var total = parseInt(cache.get("total") || "0", 10) + 1;
+  cache.put("total", String(total), 600);
+  if (total > LIMITES.demandesTotalesPar10Min) { return true; }
+
+  if (email) {
+    var cle = "email:" + Utilities.base64EncodeWebSafe(email);
+    var parEmail = parseInt(cache.get(cle) || "0", 10) + 1;
+    cache.put(cle, String(parEmail), 3600);
+    if (parEmail > LIMITES.demandesParEmailParHeure) { return true; }
+  }
+  return false;
 }
 
 function envoyerEmailConfirmation(p) {

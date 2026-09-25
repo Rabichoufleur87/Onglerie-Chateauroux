@@ -2,6 +2,8 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://script.google.com https://script.googleusercontent.com; form-action 'self' mailto:; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Contact & rendez-vous · Fnails.chtrx</title>
 <meta name="description" content="Prenez rendez-vous chez Fnails.chtrx, onglerie au 71 rue de la Poste à Châteauroux. 06 58 81 11 98, 9h-13h et 14h-19h.">
@@ -12,20 +14,10 @@
 <meta property="og:image" content="assets/img/nail-art-dore-marbre.jpg">
 <meta name="theme-color" content="#f5efe8">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23231a17'/%3E%3Ctext x='50%25' y='54%25' text-anchor='middle' dominant-baseline='middle' font-family='Georgia,serif' font-style='italic' font-size='40' fill='%23f5efe8'%3Ef%3C/text%3E%3Ccircle cx='47' cy='46' r='4' fill='%23e3a4b2'/%3E%3C/svg%3E">
-<script>
-(function () {
-  document.documentElement.classList.add("js");
-  try {
-    var saved = localStorage.getItem("fnails-theme");
-    var theme = saved || "light"; // clair par défaut, sombre seulement si choisi
-    document.documentElement.setAttribute("data-mode", theme);
-  } catch (e) {}
-})();
-</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..500&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/css/style.css?v=4">
+<script src="assets/js/theme.js?v=5"></script>
+<link rel="preload" href="assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/style.css?v=5">
 </head>
 <body>
 
@@ -92,7 +84,7 @@
       <ul class="info-liste">
           <li>
             <span class="icone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.5 10c0 5.5-7.5 11.5-7.5 11.5S4.5 15.5 4.5 10a7.5 7.5 0 0 1 15 0z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
-            <div><span class="libelle">Adresse</span><p><a href="https://www.google.com/maps/search/?api=1&amp;query=71+rue+de+la+Poste+36000+Ch%C3%A2teauroux" target="_blank" rel="noopener">71 rue de la Poste, 36000 Châteauroux</a></p></div>
+            <div><span class="libelle">Adresse</span><p><a href="https://www.google.com/maps/search/?api=1&amp;query=71+rue+de+la+Poste+36000+Ch%C3%A2teauroux" target="_blank" rel="noopener noreferrer">71 rue de la Poste, 36000 Châteauroux</a></p></div>
           </li>
           <li>
             <span class="icone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M12 7.2V12l3.2 2"/></svg></span>
@@ -108,7 +100,7 @@
           </li>
           <li>
             <span class="icone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.8"/><circle cx="17" cy="7" r="0.6" fill="currentColor"/></svg></span>
-            <div><span class="libelle">Réseaux sociaux</span><p><a href="https://www.tiktok.com/@fnails.chtrx_" target="_blank" rel="noopener">TikTok @fnails.chtrx_</a> · Instagram @fnails.chtrx</p></div>
+            <div><span class="libelle">Réseaux sociaux</span><p><a href="https://www.tiktok.com/@fnails.chtrx_" target="_blank" rel="noopener noreferrer">TikTok @fnails.chtrx_</a> · Instagram @fnails.chtrx</p></div>
           </li>
       </ul>
     </div>
@@ -170,33 +162,46 @@
           <div class="champ-ligne">
           <div class="champ">
             <label for="rdv-nom">Nom</label>
-            <input type="text" id="rdv-nom" name="nom" required autocomplete="name" aria-describedby="rdv-nom-erreur">
+            <input type="text" id="rdv-nom" name="nom" required maxlength="80" autocomplete="name" aria-describedby="rdv-nom-erreur">
             <span class="champ__erreur" id="rdv-nom-erreur" hidden>Indiquez votre nom.</span>
           </div>
           <div class="champ">
             <label for="rdv-telephone">Téléphone</label>
-            <input type="tel" id="rdv-telephone" name="telephone" required autocomplete="tel" pattern="[0-9+ .\(\)\-]{10,}" aria-describedby="rdv-telephone-erreur">
+            <input type="tel" id="rdv-telephone" name="telephone" required maxlength="20" autocomplete="tel" pattern="[0-9+ .\(\)\-]{10,}" aria-describedby="rdv-telephone-erreur">
             <span class="champ__erreur" id="rdv-telephone-erreur" hidden>Indiquez un numéro valide, par exemple 06 12 34 56 78.</span>
           </div>
           </div>
 
           <div class="champ">
             <label for="rdv-email">Votre email</label>
-            <input type="email" id="rdv-email" name="email" required autocomplete="email" aria-describedby="rdv-email-erreur">
+            <input type="email" id="rdv-email" name="email" required maxlength="120" autocomplete="email" aria-describedby="rdv-email-erreur">
             <span class="champ__erreur" id="rdv-email-erreur" hidden>Indiquez un email valide.</span>
           </div>
 
           <div class="champ">
             <label for="rdv-message">Message <small>(optionnel)</small></label>
-            <textarea id="rdv-message" name="message" rows="3" placeholder="Précisions, photo d'inspiration, contrainte d'horaire..."></textarea>
+            <textarea id="rdv-message" name="message" rows="3" maxlength="1000" placeholder="Précisions, photo d'inspiration, contrainte d'horaire..."></textarea>
           </div>
 
           <input type="hidden" id="rdv-duree" name="duree_min" value="60">
+
+          <!-- Champ piège anti-robots : invisible pour les visiteuses, seuls les robots le remplissent -->
+          <div class="piege" aria-hidden="true">
+            <label for="rdv-site">Ne pas remplir ce champ</label>
+            <input type="text" id="rdv-site" name="site_web" tabindex="-1" autocomplete="off">
+          </div>
 
           <div class="formulaire__envoi">
             <p>Le créneau reste à confirmer par le salon.</p>
             <button type="submit" class="btn"><span class="btn__texte">Envoyer la demande</span><span class="btn__icone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button>
           </div>
+
+          <p class="mention-rgpd">
+            Vos informations servent uniquement à organiser votre rendez-vous : elles sont
+            enregistrées dans l'agenda du salon et conservées 3 ans au plus après votre dernier
+            rendez-vous. Vous pouvez y accéder, les corriger ou les faire supprimer à tout moment.
+            <a href="politique-de-confidentialite.html">En savoir plus</a>.
+          </p>
 
           <div id="rdv-resultat" class="rdv-resultat" hidden aria-live="polite">
             <p class="note" id="rdv-resultat-texte"></p>
@@ -216,7 +221,7 @@
       <div>
         <p>Onglerie à Châteauroux. Pose américaine, capsules + gel, gainage, nail art et pédicure, sur rendez-vous.</p>
         <div class="pied__reseaux">
-          <a href="https://www.tiktok.com/@fnails.chtrx_" target="_blank" rel="noopener" aria-label="TikTok Fnails.chtrx"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 3c.4 2.2 1.9 3.9 4.2 4.2v3c-1.5 0-3-.4-4.2-1.2v6.4a5.4 5.4 0 1 1-5.4-5.4c.3 0 .6 0 .9.1v3.1a2.3 2.3 0 1 0 1.7 2.2V3h2.8z"/></svg></a>
+          <a href="https://www.tiktok.com/@fnails.chtrx_" target="_blank" rel="noopener noreferrer" aria-label="TikTok Fnails.chtrx"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 3c.4 2.2 1.9 3.9 4.2 4.2v3c-1.5 0-3-.4-4.2-1.2v6.4a5.4 5.4 0 1 1-5.4-5.4c.3 0 .6 0 .9.1v3.1a2.3 2.3 0 1 0 1.7 2.2V3h2.8z"/></svg></a>
         </div>
       </div>
       <div>
@@ -243,12 +248,13 @@
       <span>© <span data-annee>2026</span> Fnails.chtrx · SIRET 943 481 648 00013</span>
       <ul>
         <li><a href="mentions-legales.html">Mentions légales</a></li>
+        <li><a href="politique-de-confidentialite.html">Confidentialité &amp; cookies</a></li>
         <li><a href="mailto:fnails.chtrx@gmail.com">fnails.chtrx@gmail.com</a></li>
       </ul>
     </div>
   </div>
 </footer>
 
-<script src="assets/js/app.js?v=4" defer></script>
+<script src="assets/js/app.js?v=5" defer></script>
 </body>
 </html>

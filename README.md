@@ -12,7 +12,10 @@ galerie.html            Galerie
 a-propos.html            À propos
 contact.html               Contact
 mentions-legales.html        Mentions légales
+politique-de-confidentialite.html  Confidentialité (RGPD) & cookies
+404.html                     Page d'erreur « introuvable »
 assets/css/style.css      Styles
+assets/fonts/               Polices hébergées sur le site (licence OFL)
 assets/js/app.js            Menu, thème, apparitions, diaporama, formulaire de RDV
 assets/img/                  Photos du salon / des réalisations
 google-apps-script/Code.gs   Backend Google Calendar (voir plus bas)
@@ -76,11 +79,16 @@ l'événement dans l'agenda, sans aucune action manuelle.
 
 ## Informations à compléter
 
-Il reste peu de choses à compléter :
+Surlignées en rose sur le site (classe `a-completer`), à remplacer dès que possible :
 
-- Nom de la responsable de la publication (mentions légales)
-- Lien Instagram (le compte `@fnails.chtrx` est mentionné mais non lié)
-- Connexion Google Calendar (`RDV_WEBAPP_URL`, voir section ci-dessus)
+- **Nom de la gérante** : mentions légales (éditeur, directrice de la publication)
+  et politique de confidentialité (responsable du traitement).
+- **Régime de TVA** (mentions légales) : « TVA non applicable, article 293 B du CGI »
+  en micro-entreprise, sinon le numéro de TVA intracommunautaire.
+- **Médiateur de la consommation** (mentions légales) : obligatoire pour vendre
+  des prestations à des particuliers. Adhérer à un médiateur agréé (liste sur
+  economie.gouv.fr/mediation-conso), puis indiquer son nom, son adresse et son site.
+- Lien Instagram (le compte `@fnails.chtrx` est mentionné mais non lié).
 
 Confirmées et déjà intégrées :
 - Adresse : 71 rue de la Poste, 36000 Châteauroux
@@ -92,3 +100,22 @@ Confirmées et déjà intégrées :
 - Tarifs des 17 prestations (pose américaine, pose capsules + gel, gainage,
   dépose, pédicure)
 - Prise de rendez-vous directement sur le site (`contact.html#rdv`)
+
+## Sécurité
+
+- **Politique de sécurité du contenu (CSP)** dans chaque page (`<meta http-equiv>`) :
+  seuls les scripts, styles, images et polices du site sont autorisés, plus les
+  appels au Web App Google Apps Script. Aucun script en ligne : le choix du thème
+  est dans `assets/js/theme.js`. Si vous ajoutez un service externe (carte
+  intégrée, vidéo, statistiques...), il faudra l'autoriser dans la CSP de chaque page.
+- **Aucune ressource tierce** au chargement (polices hébergées sur le site) :
+  pas de cookie, pas de bandeau de consentement nécessaire.
+- **Formulaire** : champ piège anti-robots, longueurs maximales, et surtout
+  validation côté serveur dans `google-apps-script/Code.gs` (formats, horaires
+  d'ouverture, date à venir, pas de lien dans le nom) avec limite de demandes
+  (3 par email et par heure, 20 au total par 10 minutes).
+  **Après toute modification de `Code.gs`, il faut le recopier dans l'éditeur
+  Apps Script et publier une nouvelle version du déploiement** (Déployer >
+  Gérer les déploiements > modifier > Nouvelle version), sinon l'ancienne
+  version continue de tourner.
+- Liens externes en `rel="noopener noreferrer"`, politique de référent stricte.
