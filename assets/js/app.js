@@ -120,6 +120,82 @@
       champDuree.value = (option && option.getAttribute("data-duree-min")) || "60";
     });
 
+    // ===== Navigation par étapes (prestation → date/heure → coordonnées) =====
+    var etapes = formulaireRdv.querySelectorAll(".etape");
+    var indicateurItems = document.querySelectorAll("[data-etape-lien]");
+    var etapeActuelle = 1;
+
+    var formaterDateFr = function (iso) {
+      var p = iso.split("-");
+      return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : iso;
+    };
+
+    var creerLienModifier = function (cible) {
+      var lien = document.createElement("button");
+      lien.type = "button";
+      lien.className = "etape__modifier";
+      lien.textContent = "Modifier";
+      lien.addEventListener("click", function () { afficherEtape(cible); });
+      return lien;
+    };
+
+    var majRecaps = function () {
+      var recap1 = formulaireRdv.querySelector('[data-recap="1"]');
+      if (recap1) {
+        recap1.innerHTML = "";
+        var option = champPrestation.options[champPrestation.selectedIndex];
+        var libelle = option && option.value ? option.textContent : "";
+        recap1.appendChild(document.createTextNode("Prestation : " + libelle + " — "));
+        recap1.appendChild(creerLienModifier(1));
+      }
+      var recap2 = formulaireRdv.querySelector('[data-recap="2"]');
+      if (recap2) {
+        var heure = document.getElementById("rdv-heure").value;
+        if (champDate.value || heure) {
+          recap2.innerHTML = "";
+          var texteDate = champDate.value ? formaterDateFr(champDate.value) : "—";
+          recap2.appendChild(document.createTextNode("Créneau : " + texteDate + (heure ? " à " + heure : "") + " — "));
+          recap2.appendChild(creerLienModifier(2));
+        } else {
+          recap2.textContent = "";
+        }
+      }
+    };
+
+    var afficherEtape = function (n) {
+      etapes.forEach(function (etape) {
+        etape.hidden = Number(etape.getAttribute("data-etape")) !== n;
+      });
+      indicateurItems.forEach(function (item) {
+        var num = Number(item.getAttribute("data-etape-lien"));
+        item.classList.toggle("est-active", num === n);
+        item.classList.toggle("est-complete", num < n);
+      });
+      etapeActuelle = n;
+      majRecaps();
+      formulaireRdv.closest(".formulaire").scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
+    var verifierEtape = function (n) {
+      var champs = formulaireRdv.querySelector('.etape[data-etape="' + n + '"]').querySelectorAll("[required]");
+      var valide = true;
+      var premierInvalide = null;
+      champs.forEach(function (champ) {
+        if (!verifierChamp(champ) && !premierInvalide) { premierInvalide = champ; valide = false; }
+      });
+      if (premierInvalide) { premierInvalide.focus(); }
+      return valide;
+    };
+
+    formulaireRdv.querySelectorAll('[data-action="etape-suivante"]').forEach(function (bouton) {
+      bouton.addEventListener("click", function () {
+        if (verifierEtape(etapeActuelle)) { afficherEtape(etapeActuelle + 1); }
+      });
+    });
+    formulaireRdv.querySelectorAll('[data-action="etape-precedente"]').forEach(function (bouton) {
+      bouton.addEventListener("click", function () { afficherEtape(etapeActuelle - 1); });
+    });
+
     var construireTexte = function (d) {
       return (
         "Nouvelle demande de rendez-vous — Fnails.chtrx\n\n" +
@@ -157,6 +233,7 @@
       if (piege && piege.value) {
         afficherResultat("Votre demande a bien été prise en compte.", true);
         formulaireRdv.reset();
+        afficherEtape(1);
         return;
       }
 
@@ -195,6 +272,7 @@
                 true
               );
               formulaireRdv.reset();
+              afficherEtape(1);
             } else if (resultatJson && resultatJson.raison === "conflit") {
               afficherResultat(
                 "Ce créneau vient d'être réservé par quelqu'un d'autre. Merci de choisir une autre date ou un autre horaire.",

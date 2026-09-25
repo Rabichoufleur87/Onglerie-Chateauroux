@@ -1028,9 +1028,66 @@ button.btn[disabled] { opacity: 0.6; cursor: progress; }
 #rdv { scroll-margin-top: 6rem; }
 .formulaire .noyau { padding: clamp(1.5rem, 4vw, 3rem); }
 .formulaire h2 { font-size: clamp(2rem, 3.6vw, 2.8rem); }
-.formulaire__intro { margin-bottom: 2.25rem; }
+.formulaire__intro { margin-bottom: 1.75rem; }
+
+.etapes-indicateur { list-style: none; display: flex; margin: 0 0 2.25rem; padding: 0; }
+.etapes-indicateur__item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--encre-pale);
+  flex: 1;
+}
+.etapes-indicateur__item:not(:last-child)::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--ligne);
+  margin: 0 0.75rem;
+  transition: background-color 0.4s var(--ease);
+}
+.etapes-indicateur__item.est-complete::after { background: var(--accent); }
+.etapes-indicateur__item span {
+  flex: none;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--fond);
+  box-shadow: inset 0 0 0 1px var(--ligne);
+  color: var(--encre-pale);
+  transition: background-color 0.35s var(--ease), color 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+.etapes-indicateur__item.est-active { color: var(--encre); }
+.etapes-indicateur__item.est-active span,
+.etapes-indicateur__item.est-complete span {
+  background: var(--accent);
+  color: var(--surface);
+  box-shadow: none;
+}
 
 #formulaire-rdv { display: flex; flex-direction: column; gap: 1.25rem; }
+.etape { display: flex; flex-direction: column; gap: 1.25rem; }
+.etape[hidden] { display: none; }
+.etape__recap { margin: -0.5rem 0 0; font-size: 0.85rem; color: var(--encre-pale); }
+.etape__modifier {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.etape__nav { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.etape__nav--seul { justify-content: flex-end; }
+.etape__nav--envoi { justify-content: flex-start; }
 .champ-ligne { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
 .champ { display: flex; flex-direction: column; gap: 0.5rem; }
 .champ label { font-size: 0.8rem; font-weight: 600; color: var(--encre); }
@@ -1211,7 +1268,17 @@ button.btn[disabled] { opacity: 0.6; cursor: progress; }
   .champ-ligne, .fiche { grid-template-columns: minmax(0, 1fr); }
   .pied__grille { grid-template-columns: minmax(0, 1fr); }
   .engagements__liste li { grid-template-columns: 3rem minmax(0, 1fr); gap: 1rem; }
+  .formulaire__envoi { flex-direction: column; align-items: stretch; }
   .formulaire__envoi .btn { width: 100%; justify-content: space-between; }
+  .etape__nav { flex-wrap: wrap; }
+  .etape__nav .btn { flex: 1 1 auto; justify-content: center; }
+  .etapes-indicateur__item span { width: 1.7rem; height: 1.7rem; font-size: 0.72rem; }
+}
+
+@media (max-width: 420px) {
+  .etapes-indicateur__item { font-size: 0; gap: 0; }
+  .etapes-indicateur__item span { font-size: 0.72rem; }
+  .etapes-indicateur__item:not(:last-child)::after { margin: 0 0.4rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

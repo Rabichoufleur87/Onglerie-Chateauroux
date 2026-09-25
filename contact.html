@@ -109,105 +109,131 @@
       <div class="noyau">
         <span class="surtitre">Demande de rendez-vous</span>
         <h2>Réservez votre <em>créneau</em></h2>
-        <p class="formulaire__intro">Remplissez le formulaire pour envoyer votre demande. Vous recevrez une confirmation par téléphone ou message une fois le créneau validé.</p>
+        <p class="formulaire__intro">Trois étapes rapides. Vous recevrez une confirmation une fois le créneau validé par le salon.</p>
+
+        <ol class="etapes-indicateur" data-etapes-indicateur>
+          <li class="etapes-indicateur__item est-active" data-etape-lien="1"><span>1</span>Prestation</li>
+          <li class="etapes-indicateur__item" data-etape-lien="2"><span>2</span>Date &amp; heure</li>
+          <li class="etapes-indicateur__item" data-etape-lien="3"><span>3</span>Coordonnées</li>
+        </ol>
 
         <form id="formulaire-rdv" novalidate>
-          <div class="champ">
-            <label for="rdv-prestation">Prestation souhaitée</label>
-            <select id="rdv-prestation" name="prestation" required aria-describedby="rdv-prestation-erreur">
-            <option value="" disabled selected>Choisissez une prestation</option>
-            <optgroup label="Pose américaine">
-              <option data-duree-min="60">Pose américaine couleur uni — 35,00 €</option>
-              <option data-duree-min="60">Pose américaine french/baby boomer — 40,00 €</option>
-              <option data-duree-min="60">Pose américaine nail art niveau 1 — 45,00 €</option>
-              <option data-duree-min="60">Pose américaine nail art niveau 2 — à partir de 50,00 €</option>
-              <option data-duree-min="60">Pose américaine nail art niveau 3 — à partir de 55,00 €</option>
-              <option data-duree-min="60">Pose américaine nail art niveau 4 — à partir de 60,00 €</option>
-            </optgroup>
-            <optgroup label="Pose capsules + gel">
-              <option data-duree-min="60">Pose capsules + gel couleur uni — 40,00 €</option>
-              <option data-duree-min="60">Pose capsules + gel french/baby boomer — 45,00 €</option>
-              <option data-duree-min="60">Pose capsules + gel nail art niveau 1 — à partir de 50,00 €</option>
-              <option data-duree-min="60">Pose capsules + gel nail art niveau 2 — à partir de 55,00 €</option>
-              <option data-duree-min="60">Pose capsules + gel nail art niveau 3 — à partir de 60,00 €</option>
-              <option data-duree-min="60">Pose capsules + gel nail art niveau 4 — à partir de 65,00 €</option>
-            </optgroup>
-            <optgroup label="Gainage &amp; renforcement">
-              <option data-duree-min="60">Gainage/renforcement couleur uni — 40,00 €</option>
-              <option data-duree-min="60">Gainage/renforcement french/baby boomer — 45,00 €</option>
-            </optgroup>
-            <optgroup label="Dépose &amp; pédicure">
-              <option data-duree-min="30">Dépose — à partir de 10,00 €</option>
-              <option data-duree-min="60">Pédicure couleur uni — à partir de 30,00 €</option>
-              <option data-duree-min="60">Pédicure french — 40,00 €</option>
-            </optgroup>
-            <option data-duree-min="60" value="Autre / je ne sais pas encore">Autre / je ne sais pas encore</option>
-            </select>
-            <span class="champ__erreur" id="rdv-prestation-erreur" hidden>Choisissez une prestation.</span>
+
+          <div class="etape" data-etape="1">
+            <div class="champ">
+              <label for="rdv-prestation">Prestation souhaitée</label>
+              <select id="rdv-prestation" name="prestation" required aria-describedby="rdv-prestation-erreur">
+              <option value="" disabled selected>Choisissez une prestation</option>
+              <optgroup label="Pose américaine">
+                <option data-duree-min="60">Pose américaine couleur uni — 35,00 €</option>
+                <option data-duree-min="60">Pose américaine french/baby boomer — 40,00 €</option>
+                <option data-duree-min="60">Pose américaine nail art niveau 1 — 45,00 €</option>
+                <option data-duree-min="60">Pose américaine nail art niveau 2 — à partir de 50,00 €</option>
+                <option data-duree-min="60">Pose américaine nail art niveau 3 — à partir de 55,00 €</option>
+                <option data-duree-min="60">Pose américaine nail art niveau 4 — à partir de 60,00 €</option>
+              </optgroup>
+              <optgroup label="Pose capsules + gel">
+                <option data-duree-min="60">Pose capsules + gel couleur uni — 40,00 €</option>
+                <option data-duree-min="60">Pose capsules + gel french/baby boomer — 45,00 €</option>
+                <option data-duree-min="60">Pose capsules + gel nail art niveau 1 — à partir de 50,00 €</option>
+                <option data-duree-min="60">Pose capsules + gel nail art niveau 2 — à partir de 55,00 €</option>
+                <option data-duree-min="60">Pose capsules + gel nail art niveau 3 — à partir de 60,00 €</option>
+                <option data-duree-min="60">Pose capsules + gel nail art niveau 4 — à partir de 65,00 €</option>
+              </optgroup>
+              <optgroup label="Gainage &amp; renforcement">
+                <option data-duree-min="60">Gainage/renforcement couleur uni — 40,00 €</option>
+                <option data-duree-min="60">Gainage/renforcement french/baby boomer — 45,00 €</option>
+              </optgroup>
+              <optgroup label="Dépose &amp; pédicure">
+                <option data-duree-min="30">Dépose — à partir de 10,00 €</option>
+                <option data-duree-min="60">Pédicure couleur uni — à partir de 30,00 €</option>
+                <option data-duree-min="60">Pédicure french — 40,00 €</option>
+              </optgroup>
+              <option data-duree-min="60" value="Autre / je ne sais pas encore">Autre / je ne sais pas encore</option>
+              </select>
+              <span class="champ__erreur" id="rdv-prestation-erreur" hidden>Choisissez une prestation.</span>
+            </div>
+            <div class="etape__nav etape__nav--seul">
+              <button type="button" class="btn" data-action="etape-suivante"><span class="btn__texte">Continuer</span><span class="btn__icone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button>
+            </div>
           </div>
 
-          <div class="champ-ligne">
-          <div class="champ">
-            <label for="rdv-date">Date souhaitée</label>
-            <input type="date" id="rdv-date" name="date" required aria-describedby="rdv-date-erreur">
-            <span class="champ__erreur" id="rdv-date-erreur" hidden>Indiquez une date à venir.</span>
-          </div>
-          <div class="champ">
-            <label for="rdv-heure">Heure souhaitée</label>
-            <input type="time" id="rdv-heure" name="heure" min="09:00" max="19:00" step="900" required aria-describedby="rdv-heure-erreur">
-            <span class="champ__erreur" id="rdv-heure-erreur" hidden>Indiquez une heure entre 9h et 19h.</span>
-          </div>
-          </div>
-
-          <div class="champ-ligne">
-          <div class="champ">
-            <label for="rdv-nom">Nom</label>
-            <input type="text" id="rdv-nom" name="nom" required maxlength="80" autocomplete="name" autocapitalize="words" aria-describedby="rdv-nom-erreur">
-            <span class="champ__erreur" id="rdv-nom-erreur" hidden>Indiquez votre nom.</span>
-          </div>
-          <div class="champ">
-            <label for="rdv-telephone">Téléphone</label>
-            <input type="tel" id="rdv-telephone" name="telephone" required maxlength="20" autocomplete="tel" pattern="[0-9+ .\(\)\-]{10,}" aria-describedby="rdv-telephone-erreur">
-            <span class="champ__erreur" id="rdv-telephone-erreur" hidden>Indiquez un numéro valide, par exemple 06 12 34 56 78.</span>
-          </div>
+          <div class="etape" data-etape="2" hidden>
+            <p class="etape__recap" data-recap="1"></p>
+            <div class="champ-ligne">
+            <div class="champ">
+              <label for="rdv-date">Date souhaitée</label>
+              <input type="date" id="rdv-date" name="date" required aria-describedby="rdv-date-erreur">
+              <span class="champ__erreur" id="rdv-date-erreur" hidden>Indiquez une date à venir.</span>
+            </div>
+            <div class="champ">
+              <label for="rdv-heure">Heure souhaitée</label>
+              <input type="time" id="rdv-heure" name="heure" min="09:00" max="19:00" step="900" required aria-describedby="rdv-heure-erreur">
+              <span class="champ__erreur" id="rdv-heure-erreur" hidden>Indiquez une heure entre 9h et 19h.</span>
+            </div>
+            </div>
+            <div class="etape__nav">
+              <button type="button" class="btn btn--clair btn--simple" data-action="etape-precedente">Retour</button>
+              <button type="button" class="btn" data-action="etape-suivante"><span class="btn__texte">Continuer</span><span class="btn__icone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button>
+            </div>
           </div>
 
-          <div class="champ">
-            <label for="rdv-email">Votre email</label>
-            <input type="email" id="rdv-email" name="email" required maxlength="120" autocomplete="email" autocapitalize="off" spellcheck="false" aria-describedby="rdv-email-erreur">
-            <span class="champ__erreur" id="rdv-email-erreur" hidden>Indiquez un email valide.</span>
+          <div class="etape" data-etape="3" hidden>
+            <p class="etape__recap" data-recap="2"></p>
+            <div class="champ-ligne">
+            <div class="champ">
+              <label for="rdv-nom">Nom</label>
+              <input type="text" id="rdv-nom" name="nom" required maxlength="80" autocomplete="name" autocapitalize="words" aria-describedby="rdv-nom-erreur">
+              <span class="champ__erreur" id="rdv-nom-erreur" hidden>Indiquez votre nom.</span>
+            </div>
+            <div class="champ">
+              <label for="rdv-telephone">Téléphone</label>
+              <input type="tel" id="rdv-telephone" name="telephone" required maxlength="20" autocomplete="tel" pattern="[0-9+ .\(\)\-]{10,}" aria-describedby="rdv-telephone-erreur">
+              <span class="champ__erreur" id="rdv-telephone-erreur" hidden>Indiquez un numéro valide, par exemple 06 12 34 56 78.</span>
+            </div>
+            </div>
+
+            <div class="champ">
+              <label for="rdv-email">Votre email</label>
+              <input type="email" id="rdv-email" name="email" required maxlength="120" autocomplete="email" autocapitalize="off" spellcheck="false" aria-describedby="rdv-email-erreur">
+              <span class="champ__erreur" id="rdv-email-erreur" hidden>Indiquez un email valide.</span>
+            </div>
+
+            <div class="champ">
+              <label for="rdv-message">Message <small>(optionnel)</small></label>
+              <textarea id="rdv-message" name="message" rows="3" maxlength="1000" placeholder="Précisions, photo d'inspiration, contrainte d'horaire..."></textarea>
+            </div>
+
+            <input type="hidden" id="rdv-duree" name="duree_min" value="60">
+
+            <!-- Champ piège anti-robots : invisible pour les visiteuses, seuls les robots le remplissent -->
+            <div class="piege" aria-hidden="true">
+              <label for="rdv-site">Ne pas remplir ce champ</label>
+              <input type="text" id="rdv-site" name="site_web" tabindex="-1" autocomplete="off">
+            </div>
+
+            <div class="formulaire__envoi">
+              <p>Le créneau reste à confirmer par le salon.</p>
+              <div class="etape__nav etape__nav--envoi">
+                <button type="button" class="btn btn--clair btn--simple" data-action="etape-precedente">Retour</button>
+                <button type="submit" class="btn"><span class="btn__texte">Envoyer la demande</span><span class="btn__icone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button>
+              </div>
+            </div>
+
+            <p class="mention-rgpd">
+              Vos informations servent uniquement à organiser votre rendez-vous : elles sont
+              enregistrées dans l'agenda du salon et conservées 3 ans au plus après votre dernier
+              rendez-vous. Vous pouvez y accéder, les corriger ou les faire supprimer à tout moment.
+              <a href="politique-de-confidentialite.html">En savoir plus</a>.
+            </p>
+
+            <div id="rdv-resultat" class="rdv-resultat" hidden aria-live="polite">
+              <p class="note" id="rdv-resultat-texte"></p>
+              <pre id="rdv-texte" class="rdv-texte" hidden></pre>
+              <button type="button" class="btn btn--clair btn--petit btn--simple" data-action="copier-rdv" hidden>Copier le texte</button>
+            </div>
           </div>
 
-          <div class="champ">
-            <label for="rdv-message">Message <small>(optionnel)</small></label>
-            <textarea id="rdv-message" name="message" rows="3" maxlength="1000" placeholder="Précisions, photo d'inspiration, contrainte d'horaire..."></textarea>
-          </div>
-
-          <input type="hidden" id="rdv-duree" name="duree_min" value="60">
-
-          <!-- Champ piège anti-robots : invisible pour les visiteuses, seuls les robots le remplissent -->
-          <div class="piege" aria-hidden="true">
-            <label for="rdv-site">Ne pas remplir ce champ</label>
-            <input type="text" id="rdv-site" name="site_web" tabindex="-1" autocomplete="off">
-          </div>
-
-          <div class="formulaire__envoi">
-            <p>Le créneau reste à confirmer par le salon.</p>
-            <button type="submit" class="btn"><span class="btn__texte">Envoyer la demande</span><span class="btn__icone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></button>
-          </div>
-
-          <p class="mention-rgpd">
-            Vos informations servent uniquement à organiser votre rendez-vous : elles sont
-            enregistrées dans l'agenda du salon et conservées 3 ans au plus après votre dernier
-            rendez-vous. Vous pouvez y accéder, les corriger ou les faire supprimer à tout moment.
-            <a href="politique-de-confidentialite.html">En savoir plus</a>.
-          </p>
-
-          <div id="rdv-resultat" class="rdv-resultat" hidden aria-live="polite">
-            <p class="note" id="rdv-resultat-texte"></p>
-            <pre id="rdv-texte" class="rdv-texte" hidden></pre>
-            <button type="button" class="btn btn--clair btn--petit btn--simple" data-action="copier-rdv" hidden>Copier le texte</button>
-          </div>
         </form>
       </div>
     </div>
