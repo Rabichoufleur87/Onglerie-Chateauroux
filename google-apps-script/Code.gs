@@ -34,7 +34,8 @@ var CALENDAR_ID = "primary"; // "primary" = l'agenda principal de ce compte Goog
 
 // Adresse recevant un email de notification pour chaque nouvelle demande de RDV
 // (la gérante). Même adresse que RDV_EMAIL dans assets/js/app.js.
-var EMAIL_PATRON = "fnails.chtrx@gmail.com";
+// TODO: remettre "fnails.chtrx@gmail.com" une fois les tests terminés.
+var EMAIL_PATRON = "mateo.tixeuil87@gmail.com";
 
 // Horaires d'ouverture, utilisés à la fois pour vérifier les demandes et
 // pour proposer les créneaux disponibles dans le formulaire.
