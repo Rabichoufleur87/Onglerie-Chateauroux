@@ -88,16 +88,112 @@
     var boutonEnvoyer = formulaireRdv.querySelector("button[type='submit']");
     var libelleEnvoyer = boutonEnvoyer.querySelector(".btn__texte") || boutonEnvoyer;
     var champDate = document.getElementById("rdv-date");
+    var champHeure = document.getElementById("rdv-heure");
+    var etatCreneaux = document.querySelector("[data-creneaux-etat]");
 
-    // Pas de rendez-vous dans le passé
-    var aujourdhui = new Date();
-    aujourdhui.setMinutes(aujourdhui.getMinutes() - aujourdhui.getTimezoneOffset());
-    champDate.min = aujourdhui.toISOString().slice(0, 10);
+    // ===== Jours proposés (aujourd'hui + 44 jours) =====
+    var JOURS_PROPOSES = 45;
+    var versISO = function (date) {
+      var mois = ("0" + (date.getMonth() + 1)).slice(-2);
+      var jour = ("0" + date.getDate()).slice(-2);
+      return date.getFullYear() + "-" + mois + "-" + jour;
+    };
+    (function remplirJours() {
+      var aujourdhui = new Date();
+      for (var i = 0; i < JOURS_PROPOSES; i++) {
+        var jour = new Date(aujourdhui.getFullYear(), aujourdhui.getMonth(), aujourdhui.getDate() + i);
+        var option = document.createElement("option");
+        option.value = versISO(jour);
+        var libelle = jour.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+        option.textContent = (i === 0 ? "Aujourd'hui — " : i === 1 ? "Demain — " : "") + libelle.charAt(0).toUpperCase() + libelle.slice(1);
+        champDate.appendChild(option);
+      }
+    })();
+
+    // ===== Créneaux disponibles pour le jour choisi =====
+    var jetonRequete = 0;
+    var chargerCreneaux = function () {
+      var date = champDate.value;
+      if (!date) { return; }
+
+      var jeton = ++jetonRequete;
+      champHeure.disabled = true;
+      champHeure.innerHTML = '<option value="" disabled selected>Chargement des horaires...</option>';
+      etatCreneaux.textContent = "";
+
+      var versMinutes = function (hhmm) {
+        var p = hhmm.split(":");
+        return parseInt(p[0], 10) * 60 + parseInt(p[1], 10);
+      };
+      var depuisMinutes = function (total) {
+        return ("0" + Math.floor(total / 60)).slice(-2) + ":" + ("0" + (total % 60)).slice(-2);
+      };
+      // Mêmes horaires que le script (matin/après-midi, pas de 30 min) : sert
+      // uniquement de repli si la vérification en direct n'a pas pu se faire.
+      var remplirGenerique = function (note) {
+        champHeure.innerHTML = '<option value="" disabled selected>Choisissez une heure</option>';
+        var duree = parseInt(champDuree.value, 10) || 60;
+        [["09:00", "13:00"], ["14:00", "19:00"]].forEach(function (periode) {
+          var curseur = versMinutes(periode[0]);
+          var limite = versMinutes(periode[1]);
+          while (curseur + duree <= limite) {
+            var h = depuisMinutes(curseur);
+            var option = document.createElement("option");
+            option.value = h;
+            option.textContent = h;
+            champHeure.appendChild(option);
+            curseur += 30;
+          }
+        });
+        champHeure.disabled = false;
+        etatCreneaux.textContent = note || "";
+      };
+
+      if (!RDV_WEBAPP_URL) {
+        remplirGenerique("");
+        return;
+      }
+
+      var parametres = new URLSearchParams({ action: "creneaux", date: date, duree_min: champDuree.value || "60" });
+      fetch(RDV_WEBAPP_URL + "?" + parametres.toString())
+        .then(function (reponseHttp) { return reponseHttp.json(); })
+        .then(function (json) {
+          if (jeton !== jetonRequete) { return; }
+          if (!json || !json.ok || !Array.isArray(json.creneaux)) {
+            remplirGenerique("Disponibilité non vérifiée pour ce jour : le salon confirmera votre créneau.");
+            return;
+          }
+          if (json.creneaux.length === 0) {
+            champHeure.innerHTML = '<option value="" disabled selected>Aucun horaire disponible</option>';
+            champHeure.disabled = true;
+            etatCreneaux.textContent = "Aucun horaire disponible ce jour-là, choisissez un autre jour.";
+            return;
+          }
+          champHeure.innerHTML = '<option value="" disabled selected>Choisissez une heure</option>';
+          json.creneaux.forEach(function (creneau) {
+            var option = document.createElement("option");
+            option.value = creneau.heure;
+            option.textContent = creneau.libre ? creneau.heure : creneau.heure + " — complet";
+            option.disabled = !creneau.libre;
+            champHeure.appendChild(option);
+          });
+          champHeure.disabled = false;
+          etatCreneaux.textContent = "";
+        })
+        .catch(function () {
+          if (jeton !== jetonRequete) { return; }
+          remplirGenerique("Disponibilité non vérifiée pour ce jour : le salon confirmera votre créneau.");
+        });
+    };
+
+    champDate.addEventListener("change", chargerCreneaux);
 
     // Validation en ligne : message sous le champ, pas d'alerte
     var champsRequis = formulaireRdv.querySelectorAll("[required]");
     var verifierChamp = function (champ) {
-      var valide = champ.checkValidity();
+      // Un champ requis mais encore désactivé (ex. heures pas encore chargées)
+      // ne doit pas être considéré valide juste parce qu'il est désactivé.
+      var valide = champ.disabled ? !(champ.required && !champ.value) : champ.checkValidity();
       var bloc = champ.closest(".champ");
       var erreur = document.getElementById(champ.id + "-erreur");
       if (bloc) { bloc.classList.toggle("champ--erreur", !valide); }
@@ -118,6 +214,8 @@
     champPrestation.addEventListener("change", function () {
       var option = champPrestation.options[champPrestation.selectedIndex];
       champDuree.value = (option && option.getAttribute("data-duree-min")) || "60";
+      // La durée change les créneaux qui peuvent tenir avant la pause/fermeture.
+      if (champDate.value) { chargerCreneaux(); }
     });
 
     // ===== Navigation par étapes (prestation → date/heure → coordonnées) =====

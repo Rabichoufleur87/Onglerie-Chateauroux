@@ -162,14 +162,19 @@
             <p class="etape__recap" data-recap="1"></p>
             <div class="champ-ligne">
             <div class="champ">
-              <label for="rdv-date">Date souhaitée</label>
-              <input type="date" id="rdv-date" name="date" required aria-describedby="rdv-date-erreur">
-              <span class="champ__erreur" id="rdv-date-erreur" hidden>Indiquez une date à venir.</span>
+              <label for="rdv-date">Jour souhaité</label>
+              <select id="rdv-date" name="date" required aria-describedby="rdv-date-erreur">
+                <option value="" disabled selected>Choisissez un jour</option>
+              </select>
+              <span class="champ__erreur" id="rdv-date-erreur" hidden>Choisissez un jour.</span>
             </div>
             <div class="champ">
               <label for="rdv-heure">Heure souhaitée</label>
-              <input type="time" id="rdv-heure" name="heure" min="09:00" max="19:00" step="900" required aria-describedby="rdv-heure-erreur">
-              <span class="champ__erreur" id="rdv-heure-erreur" hidden>Indiquez une heure entre 9h et 19h.</span>
+              <select id="rdv-heure" name="heure" required aria-describedby="rdv-heure-erreur" disabled>
+                <option value="" disabled selected>Choisissez d'abord un jour</option>
+              </select>
+              <span class="champ__erreur" id="rdv-heure-erreur" hidden>Choisissez un horaire disponible.</span>
+              <p class="champ__aide" data-creneaux-etat aria-live="polite"></p>
             </div>
             </div>
             <div class="etape__nav">

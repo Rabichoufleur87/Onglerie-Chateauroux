@@ -63,6 +63,21 @@ fonctionnement, contrôlés par la constante `RDV_WEBAPP_URL` en haut de
 À partir de là, chaque demande envoyée depuis le site crée directement
 l'événement dans l'agenda, sans aucune action manuelle.
 
+### Mettre à jour le script après une modification de `Code.gs`
+
+Le Web App est déjà déployé et son URL est en service sur le site. Si le
+fichier `google-apps-script/Code.gs` change (nouvelle fonctionnalité, comme
+la vérification des créneaux disponibles), il faut republier une nouvelle
+version **sans changer l'URL** :
+
+1. Ouvrir le projet sur [script.google.com](https://script.google.com).
+2. Copier-coller le nouveau contenu de `Code.gs` à la place de l'ancien.
+3. Menu **Déployer → Gérer les déploiements**.
+4. Cliquer sur le crayon (modifier) à côté du déploiement actif.
+5. Dans **Version**, choisir **Nouvelle version**, puis **Déployer**.
+
+L'URL du Web App ne change pas : rien à modifier dans `assets/js/app.js`.
+
 ## Ajouter les photos
 
 1. Déposer les fichiers images dans `assets/img/`.

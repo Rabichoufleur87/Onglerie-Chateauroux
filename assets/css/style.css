@@ -1117,6 +1117,7 @@ button.btn[disabled] { opacity: 0.6; cursor: progress; }
   background-size: 1.1rem;
 }
 .champ textarea { min-height: 7rem; resize: vertical; }
+.champ select:disabled { opacity: 0.55; cursor: not-allowed; }
 .champ input:hover, .champ select:hover, .champ textarea:hover { box-shadow: inset 0 0 0 1px var(--ligne-forte); }
 .champ input:focus, .champ select:focus, .champ textarea:focus {
   outline: none;
@@ -1126,6 +1127,8 @@ button.btn[disabled] { opacity: 0.6; cursor: progress; }
 .champ--erreur input, .champ--erreur select, .champ--erreur textarea { box-shadow: inset 0 0 0 1.5px var(--accent); }
 .champ__erreur { font-size: 0.8rem; color: var(--accent); }
 .champ__erreur[hidden] { display: none; }
+.champ__aide { margin: 0; font-size: 0.78rem; color: var(--encre-pale); }
+.champ__aide:empty { display: none; }
 .formulaire__envoi { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 0.75rem; }
 .formulaire__envoi p { margin: 0; font-size: 0.8rem; color: var(--encre-pale); }
 .rdv-resultat { display: flex; flex-direction: column; gap: 0.8rem; }

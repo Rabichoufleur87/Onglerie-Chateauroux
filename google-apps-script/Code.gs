@@ -29,7 +29,20 @@
 
 var CALENDAR_ID = "primary"; // "primary" = l'agenda principal de ce compte Google
 
+// Horaires d'ouverture, utilisés à la fois pour vérifier les demandes et
+// pour proposer les créneaux disponibles dans le formulaire.
+var HORAIRES = {
+  matinDebut: "09:00",
+  matinFin: "13:00",
+  apremDebut: "14:00",
+  apremFin: "19:00",
+  pasCreneauxMin: 30 // intervalle entre deux créneaux proposés dans le menu déroulant
+};
+
 function doGet(e) {
+  if (e.parameter && e.parameter.action === "creneaux") {
+    return obtenirCreneaux(e);
+  }
   return traiterDemande(e);
 }
 
@@ -94,11 +107,55 @@ function traiterDemande(e) {
 var LIMITES = {
   longueurs: { prestation: 150, nom: 80, telephone: 20, email: 120, message: 1000 },
   joursMaxAVenir: 180,
-  heureOuverture: "09:00",
-  heureFermeture: "19:00",
   demandesParEmailParHeure: 3,
   demandesTotalesPar10Min: 20
 };
+
+// ===== Horaires =====
+
+function versMinutes(hhmm) {
+  var morceaux = String(hhmm).split(":");
+  return parseInt(morceaux[0], 10) * 60 + parseInt(morceaux[1], 10);
+}
+
+function depuisMinutes(total) {
+  var h = Math.floor(total / 60);
+  var m = total % 60;
+  return ("0" + h).slice(-2) + ":" + ("0" + m).slice(-2);
+}
+
+// Vrai si le créneau [début, début+durée] tient dans les horaires d'ouverture,
+// sans déborder sur la pause déjeuner ni après la fermeture du soir.
+function creneauDansHoraires(heureDebut, dureeMin) {
+  var debut = versMinutes(heureDebut);
+  var fin = debut + dureeMin;
+  var matinDebut = versMinutes(HORAIRES.matinDebut);
+  var matinFin = versMinutes(HORAIRES.matinFin);
+  var apremDebut = versMinutes(HORAIRES.apremDebut);
+  var apremFin = versMinutes(HORAIRES.apremFin);
+
+  var dansLeMatin = debut >= matinDebut && fin <= matinFin;
+  var dansLApresMidi = debut >= apremDebut && fin <= apremFin;
+  return dansLeMatin || dansLApresMidi;
+}
+
+// Liste des heures de début possibles pour une durée de prestation donnée,
+// un jour générique (sans tenir compte de l'agenda ni de l'heure actuelle).
+function genererCreneauxJour(dureeMin) {
+  var resultat = [];
+  [
+    [HORAIRES.matinDebut, HORAIRES.matinFin],
+    [HORAIRES.apremDebut, HORAIRES.apremFin]
+  ].forEach(function (periode) {
+    var curseur = versMinutes(periode[0]);
+    var limite = versMinutes(periode[1]);
+    while (curseur + dureeMin <= limite) {
+      resultat.push(depuisMinutes(curseur));
+      curseur += HORAIRES.pasCreneauxMin;
+    }
+  });
+  return resultat;
+}
 
 // Retire les caractères de contrôle et, pour les champs sur une ligne,
 // les retours à la ligne (évite de fausser le texte de l'agenda/de l'email).
@@ -137,8 +194,8 @@ function validerDemande(brut) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(p.email)) { return null; }
   if (!/^\d{4}-\d{2}-\d{2}$/.test(p.date)) { return null; }
   if (!/^\d{2}:\d{2}$/.test(p.heure)) { return null; }
-  if (p.heure < LIMITES.heureOuverture || p.heure > LIMITES.heureFermeture) { return null; }
   if (p.duree_min < 15 || p.duree_min > 240) { return null; }
+  if (!creneauDansHoraires(p.heure, p.duree_min)) { return null; }
 
   var debut = new Date(p.date + "T" + p.heure + ":00");
   if (isNaN(debut.getTime())) { return null; }
@@ -196,6 +253,47 @@ function envoyerEmailConfirmation(p) {
   } catch (erreur) {
     // L'email a échoué : le rendez-vous reste créé, on n'interrompt rien.
   }
+}
+
+// Renvoie, pour un jour et une durée de prestation donnés, la liste des
+// créneaux possibles avec leur disponibilité réelle (agenda consulté en
+// lecture seule — rien n'est créé ni modifié ici).
+function obtenirCreneaux(e) {
+  var brut = e.parameter || {};
+  var date = String(brut.date || "");
+  var dureeMin = parseInt(brut.duree_min, 10) || 60;
+
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    return reponse({ ok: false, raison: "invalide" });
+  }
+  var jour = new Date(date + "T00:00:00");
+  if (isNaN(jour.getTime())) {
+    return reponse({ ok: false, raison: "invalide" });
+  }
+  if (dureeMin < 15 || dureeMin > 240) { dureeMin = 60; }
+
+  var candidats = genererCreneauxJour(dureeMin);
+
+  // Retire les horaires déjà passés si le jour demandé est aujourd'hui.
+  var maintenant = new Date();
+  if (jour.toDateString() === maintenant.toDateString()) {
+    var heureActuelle = depuisMinutes(maintenant.getHours() * 60 + maintenant.getMinutes());
+    candidats = candidats.filter(function (h) { return h > heureActuelle; });
+  }
+
+  var agenda = CalendarApp.getCalendarById(CALENDAR_ID);
+  var evenements = agenda.getEvents(new Date(date + "T00:00:00"), new Date(date + "T23:59:59"));
+
+  var creneaux = candidats.map(function (heure) {
+    var debut = new Date(date + "T" + heure + ":00");
+    var fin = new Date(debut.getTime() + dureeMin * 60000);
+    var libre = !evenements.some(function (ev) {
+      return ev.getStartTime() < fin && ev.getEndTime() > debut;
+    });
+    return { heure: heure, libre: libre };
+  });
+
+  return reponse({ ok: true, creneaux: creneaux });
 }
 
 function reponse(objet) {
