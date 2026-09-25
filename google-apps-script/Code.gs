@@ -29,7 +29,15 @@
 
 var CALENDAR_ID = "primary"; // "primary" = l'agenda principal de ce compte Google
 
+function doGet(e) {
+  return traiterDemande(e);
+}
+
 function doPost(e) {
+  return traiterDemande(e);
+}
+
+function traiterDemande(e) {
   var verrou = LockService.getScriptLock();
 
   try {

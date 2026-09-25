@@ -4,7 +4,7 @@
   // ===== Configuration prise de rendez-vous =====
   // RDV_WEBAPP_URL : URL du Web App Google Apps Script (voir google-apps-script/Code.gs
   // et le README). Tant qu'elle est vide, le formulaire utilise le mode "mailto" de secours.
-  var RDV_WEBAPP_URL = "";
+  var RDV_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwY2eQIhn1gAZwwQCW5o62j5DjcU-3I_dNFf4MFQC-LfQlc2nHAfsX2U8YZ9WuE7d3k/exec";
   // Adresse à laquelle les demandes sont envoyées en mode "mailto" de secours.
   var RDV_EMAIL = "fnails.chtrx@gmail.com";
 
@@ -173,7 +173,11 @@
 
         var donnees = new URLSearchParams(d);
 
-        fetch(RDV_WEBAPP_URL, { method: "POST", body: donnees })
+        // Requête GET plutôt que POST : les Web Apps Google Apps Script
+        // renvoient de façon fiable les en-têtes CORS nécessaires en GET,
+        // ce qui n'est pas garanti en POST (le navigateur bloque alors la
+        // lecture de la réponse malgré une demande correctement reçue).
+        fetch(RDV_WEBAPP_URL + "?" + donnees.toString())
           .then(function (reponseHttp) { return reponseHttp.json(); })
           .then(function (resultatJson) {
             if (resultatJson && resultatJson.ok) {
