@@ -4,7 +4,7 @@
   // ===== Configuration prise de rendez-vous =====
   // RDV_WEBAPP_URL : URL du Web App Google Apps Script (voir google-apps-script/Code.gs
   // et le README). Tant qu'elle est vide, le formulaire utilise le mode "mailto" de secours.
-  var RDV_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwY2eQIhn1gAZwwQCW5o62j5DjcU-3I_dNFf4MFQC-LfQlc2nHAfsX2U8YZ9WuE7d3k/exec";
+  var RDV_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzOFW5jkfrrgX63J_KuEcI0iDrVW17y4of-pSECPOtoVJRPoNOnPOFDTBmexXcuhrpk/exec";
   // Adresse à laquelle les demandes sont envoyées en mode "mailto" de secours.
   var RDV_EMAIL = "fnails.chtrx@gmail.com";
 
