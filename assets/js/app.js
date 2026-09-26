@@ -365,8 +365,12 @@
           .then(function (reponseHttp) { return reponseHttp.json(); })
           .then(function (resultatJson) {
             if (resultatJson && resultatJson.ok) {
+              var dateChoisie = new Date(d.date + "T00:00:00");
+              var dateAffichee = isNaN(dateChoisie.getTime())
+                ? d.date
+                : dateChoisie.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
               afficherResultat(
-                "Votre demande a été envoyée : elle apparaît directement dans l'agenda du salon. Vous recevrez une confirmation.",
+                "Votre rendez-vous est confirmé pour le " + dateAffichee + " à " + d.heure + ", merci et à bientôt !",
                 true
               );
               formulaireRdv.reset();
