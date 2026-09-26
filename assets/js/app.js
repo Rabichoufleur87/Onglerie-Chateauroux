@@ -112,45 +112,48 @@
 
     // ===== Créneaux disponibles pour le jour choisi =====
     var jetonRequete = 0;
+    var versMinutes = function (hhmm) {
+      var p = hhmm.split(":");
+      return parseInt(p[0], 10) * 60 + parseInt(p[1], 10);
+    };
+    var depuisMinutes = function (total) {
+      return ("0" + Math.floor(total / 60)).slice(-2) + ":" + ("0" + (total % 60)).slice(-2);
+    };
+    // Mêmes horaires que le script (matin/après-midi, pas de 30 min), affichés
+    // tout de suite pour ne pas faire attendre la vérification en direct.
+    // Elle sera de toute façon revérifiée par le script à l'envoi du formulaire.
+    var remplirGenerique = function (note) {
+      champHeure.innerHTML = '<option value="" disabled selected>Choisissez une heure</option>';
+      var duree = parseInt(champDuree.value, 10) || 60;
+      [["09:00", "13:00"], ["14:00", "19:00"]].forEach(function (periode) {
+        var curseur = versMinutes(periode[0]);
+        var limite = versMinutes(periode[1]);
+        while (curseur + duree <= limite) {
+          var h = depuisMinutes(curseur);
+          var option = document.createElement("option");
+          option.value = h;
+          option.textContent = h;
+          champHeure.appendChild(option);
+          curseur += 30;
+        }
+      });
+      champHeure.disabled = false;
+      etatCreneaux.textContent = note || "";
+    };
+
     var chargerCreneaux = function () {
       var date = champDate.value;
       if (!date) { return; }
 
       var jeton = ++jetonRequete;
-      champHeure.disabled = true;
-      champHeure.innerHTML = '<option value="" disabled selected>Chargement des horaires...</option>';
-      etatCreneaux.textContent = "";
+      var heureDejaChoisie = champHeure.value;
 
-      var versMinutes = function (hhmm) {
-        var p = hhmm.split(":");
-        return parseInt(p[0], 10) * 60 + parseInt(p[1], 10);
-      };
-      var depuisMinutes = function (total) {
-        return ("0" + Math.floor(total / 60)).slice(-2) + ":" + ("0" + (total % 60)).slice(-2);
-      };
-      // Mêmes horaires que le script (matin/après-midi, pas de 30 min) : sert
-      // uniquement de repli si la vérification en direct n'a pas pu se faire.
-      var remplirGenerique = function (note) {
-        champHeure.innerHTML = '<option value="" disabled selected>Choisissez une heure</option>';
-        var duree = parseInt(champDuree.value, 10) || 60;
-        [["09:00", "13:00"], ["14:00", "19:00"]].forEach(function (periode) {
-          var curseur = versMinutes(periode[0]);
-          var limite = versMinutes(periode[1]);
-          while (curseur + duree <= limite) {
-            var h = depuisMinutes(curseur);
-            var option = document.createElement("option");
-            option.value = h;
-            option.textContent = h;
-            champHeure.appendChild(option);
-            curseur += 30;
-          }
-        });
-        champHeure.disabled = false;
-        etatCreneaux.textContent = note || "";
-      };
+      // Menu utilisable tout de suite, mis à jour dès que la vraie
+      // disponibilité arrive (au lieu de bloquer l'utilisateur en attendant).
+      remplirGenerique("Vérification des disponibilités en cours...");
 
       if (!RDV_WEBAPP_URL) {
-        remplirGenerique("");
+        etatCreneaux.textContent = "";
         return;
       }
 
@@ -160,7 +163,7 @@
         .then(function (json) {
           if (jeton !== jetonRequete) { return; }
           if (!json || !json.ok || !Array.isArray(json.creneaux)) {
-            remplirGenerique("Disponibilité non vérifiée pour ce jour : le salon confirmera votre créneau.");
+            etatCreneaux.textContent = "Disponibilité non vérifiée pour ce jour : le salon confirmera votre créneau.";
             return;
           }
           if (json.creneaux.length === 0) {
@@ -179,6 +182,12 @@
           });
           champHeure.disabled = false;
           etatCreneaux.textContent = "";
+          // Si l'heure choisie pendant le chargement est toujours libre, on la
+          // garde sélectionnée au lieu de faire recliquer l'utilisateur.
+          if (heureDejaChoisie) {
+            var optionChoisie = champHeure.querySelector('option[value="' + heureDejaChoisie + '"]');
+            if (optionChoisie && !optionChoisie.disabled) { champHeure.value = heureDejaChoisie; }
+          }
         })
         .catch(function () {
           if (jeton !== jetonRequete) { return; }
