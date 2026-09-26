@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://script.google.com https://script.googleusercontent.com; form-action 'self' mailto:; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://script.google.com https://script.googleusercontent.com; form-action 'self' mailto: https://script.google.com; frame-src https://script.google.com https://script.googleusercontent.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Contact & rendez-vous · Fnails.chtrx</title>
@@ -206,7 +206,13 @@
 
             <div class="champ">
               <label for="rdv-message">Message <small>(optionnel)</small></label>
-              <textarea id="rdv-message" name="message" rows="3" maxlength="1000" placeholder="Précisions, photo d'inspiration, contrainte d'horaire..."></textarea>
+              <textarea id="rdv-message" name="message" rows="3" maxlength="1000" placeholder="Précisions, contrainte d'horaire..."></textarea>
+            </div>
+
+            <div class="champ">
+              <label for="rdv-piece-jointe">Photo ou document <small>(optionnel, 5 Mo max)</small></label>
+              <input type="file" id="rdv-piece-jointe" name="fichier" accept="image/jpeg,image/png,image/webp,application/pdf" form="rdv-form-piece-jointe" aria-describedby="rdv-piece-jointe-erreur">
+              <span class="champ__erreur" id="rdv-piece-jointe-erreur" hidden>Photo ou PDF uniquement, 5 Mo maximum.</span>
             </div>
 
             <input type="hidden" id="rdv-duree" name="duree_min" value="60">
@@ -239,6 +245,19 @@
             </div>
           </div>
 
+        </form>
+
+        <!-- Zone technique : transmet la pièce jointe (le fichier ne peut pas
+             passer dans la requête principale, envoyée en GET). Toujours
+             invisible, ne s'affiche jamais à l'écran. -->
+        <iframe name="rdv-iframe-piece-jointe" class="rdv-technique" aria-hidden="true" tabindex="-1" title="Zone technique d'envoi de pièce jointe"></iframe>
+        <form id="rdv-form-piece-jointe" class="rdv-technique" method="post" target="rdv-iframe-piece-jointe" enctype="multipart/form-data" aria-hidden="true">
+          <input type="hidden" name="action" value="piece_jointe">
+          <input type="hidden" id="rdv-pj-nom" name="nom">
+          <input type="hidden" id="rdv-pj-email" name="email">
+          <input type="hidden" id="rdv-pj-prestation" name="prestation">
+          <input type="hidden" id="rdv-pj-date" name="date">
+          <input type="hidden" id="rdv-pj-heure" name="heure">
         </form>
       </div>
     </div>

@@ -1305,6 +1305,15 @@ button.btn[disabled] { opacity: 0.6; cursor: progress; }
   height: 1px;
   overflow: hidden;
 }
+/* Formulaire + iframe techniques utilisés pour transmettre une pièce jointe
+   (voir assets/js/app.js) : jamais affichés, ne gênent jamais la mise en page. */
+.rdv-technique {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
 .mention-rgpd { margin: 0; max-width: none; font-size: 0.78rem; line-height: 1.55; color: var(--encre-pale); }
 .mention-rgpd a { color: var(--encre-douce); text-underline-offset: 2px; }
 .a-completer {
