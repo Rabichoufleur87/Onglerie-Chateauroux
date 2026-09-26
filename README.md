@@ -124,9 +124,19 @@ Confirmées et déjà intégrées :
   pas de cookie, pas de bandeau de consentement nécessaire.
 - **Formulaire** : champ piège anti-robots, longueurs maximales, et surtout
   validation côté serveur dans `google-apps-script/Code.gs` (formats, horaires
-  d'ouverture, date à venir, pas de lien dans le nom) avec limite de demandes
-  (3 par email et par heure, 20 au total par 10 minutes).
-  **Après toute modification de `Code.gs`, il faut le recopier dans l'éditeur
+  d'ouverture, date à venir, jours de fermeture, pas de lien dans le nom ni la
+  prestation). Limites (après validation, pour que des requêtes bidon ne
+  bloquent pas les vraies clientes) : 3 demandes par email et par téléphone et
+  par heure, 20 au total par 10 minutes, 6 rendez-vous créés par heure et 25
+  par jour au maximum, 300 consultations de créneaux par 10 minutes.
+- **Jours de fermeture** : à régler dans `JOURS_FERMES` en haut de `Code.gs`
+  (0 = dimanche … 6 = samedi) ; ces jours sont alors refusés et signalés
+  « fermé » dans le formulaire.
+- **Fuseau horaire** : le projet Apps Script doit être en « Europe/Paris »
+  (Paramètres du projet, ou fichier `google-apps-script/appsscript.json` à
+  recopier via « Afficher le fichier manifeste »), sinon les heures des
+  rendez-vous seraient décalées.
+- **Après toute modification de `Code.gs`, il faut le recopier dans l'éditeur
   Apps Script et publier une nouvelle version du déploiement** (Déployer >
   Gérer les déploiements > modifier > Nouvelle version), sinon l'ancienne
   version continue de tourner.

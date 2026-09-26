@@ -169,7 +169,9 @@
           if (json.creneaux.length === 0) {
             champHeure.innerHTML = '<option value="" disabled selected>Aucun horaire disponible</option>';
             champHeure.disabled = true;
-            etatCreneaux.textContent = "Aucun horaire disponible ce jour-là, choisissez un autre jour.";
+            etatCreneaux.textContent = json.ferme
+              ? "Le salon est fermé ce jour-là, choisissez un autre jour."
+              : "Aucun horaire disponible ce jour-là, choisissez un autre jour.";
             return;
           }
           champHeure.innerHTML = '<option value="" disabled selected>Choisissez une heure</option>';
@@ -382,9 +384,13 @@
               afficherEtape(1);
             } else if (resultatJson && resultatJson.raison === "conflit") {
               afficherResultat(
-                "Ce créneau vient d'être réservé par quelqu'un d'autre. Merci de choisir une autre date ou un autre horaire.",
+                "Ce créneau vient d'être réservé par quelqu'un d'autre. Choisissez un autre horaire : vos coordonnées sont conservées.",
                 false
               );
+              // Retour au choix du créneau, avec les disponibilités à jour.
+              champHeure.value = "";
+              afficherEtape(2);
+              chargerCreneaux();
             } else if (resultatJson && resultatJson.raison === "limite") {
               afficherResultat(
                 "Plusieurs demandes ont déjà été envoyées récemment. Merci de patienter un peu, ou de nous appeler au 06 58 81 11 98.",

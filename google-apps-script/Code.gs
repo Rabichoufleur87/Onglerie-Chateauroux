@@ -70,12 +70,14 @@ function traiterDemande(e) {
   try {
     // Le Web App est public : tout ce qui arrive est vérifié ici, côté
     // serveur, car les contrôles du formulaire peuvent être contournés.
-    if (tropDeDemandes(e.parameter)) {
-      return reponse({ ok: false, raison: "limite" });
-    }
     var p = validerDemande(e.parameter);
     if (!p) {
       return reponse({ ok: false, raison: "invalide" });
+    }
+    // Limites vérifiées après la validation : des requêtes bidon ne peuvent
+    // plus épuiser le quota et bloquer les vraies clientes.
+    if (tropDeDemandes(p)) {
+      return reponse({ ok: false, raison: "limite" });
     }
 
     var duree = p.duree_min;
@@ -101,6 +103,7 @@ function traiterDemande(e) {
     ].join("\n");
 
     agenda.createEvent(titre, debut, fin, { description: description });
+    compterCreation();
 
     envoyerEmailConfirmation(p);
     envoyerEmailPatron(p);
@@ -117,8 +120,19 @@ var LIMITES = {
   longueurs: { prestation: 150, nom: 80, telephone: 20, email: 120, message: 1000 },
   joursMaxAVenir: 180,
   demandesParEmailParHeure: 3,
-  demandesTotalesPar10Min: 20
+  demandesParTelephoneParHeure: 3,
+  demandesTotalesPar10Min: 20,
+  // Nombre maximum de RDV créés depuis le site : empêche quelqu'un de
+  // remplir tout l'agenda avec de fausses réservations.
+  creationsParHeure: 6,
+  creationsParJour: 25,
+  // Consultations des créneaux (lecture de l'agenda) : protège les quotas Google.
+  consultationsPar10Min: 300
 };
+
+// Jours de fermeture (0 = dimanche, 1 = lundi, ..., 6 = samedi).
+// Ces jours ne sont ni proposés ni acceptés. Exemple : [0] ferme le dimanche.
+var JOURS_FERMES = [];
 
 // ===== Horaires =====
 
@@ -198,7 +212,8 @@ function validerDemande(brut) {
   if (p.nom.length < 2) { return null; }
   // Pas de lien dans le nom : il est repris dans l'email envoyé au client,
   // un lien y servirait à faire passer un message piégé pour le salon.
-  if (/https?:|www\.|\.[a-z]{2,}\//i.test(p.nom)) { return null; }
+  var contientUnLien = /https?:|www\.|\.[a-z]{2,}\//i;
+  if (contientUnLien.test(p.nom) || contientUnLien.test(p.prestation)) { return null; }
   if (!/^[0-9+ .()\-]{10,20}$/.test(p.telephone)) { return null; }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(p.email)) { return null; }
   if (!/^\d{4}-\d{2}-\d{2}$/.test(p.date)) { return null; }
@@ -211,26 +226,40 @@ function validerDemande(brut) {
   var maintenant = new Date();
   if (debut < maintenant) { return null; }
   if (debut - maintenant > LIMITES.joursMaxAVenir * 24 * 3600 * 1000) { return null; }
+  if (JOURS_FERMES.indexOf(debut.getDay()) !== -1) { return null; }
 
   return p;
 }
 
-// Limite le nombre de demandes (anti-spam) : par adresse email et au total.
-function tropDeDemandes(brut) {
+// Incrémente un compteur temporaire et dit s'il dépasse la limite.
+function depasse(cle, limite, dureeSecondes) {
   var cache = CacheService.getScriptCache();
-  var email = String((brut && brut.email) || "").toLowerCase().slice(0, 120);
+  var valeur = parseInt(cache.get(cle) || "0", 10) + 1;
+  cache.put(cle, String(valeur), dureeSecondes);
+  return valeur > limite;
+}
 
-  var total = parseInt(cache.get("total") || "0", 10) + 1;
-  cache.put("total", String(total), 600);
-  if (total > LIMITES.demandesTotalesPar10Min) { return true; }
+function cleSure(prefixe, texte) {
+  return prefixe + ":" + Utilities.base64EncodeWebSafe(String(texte).toLowerCase().slice(0, 120));
+}
 
-  if (email) {
-    var cle = "email:" + Utilities.base64EncodeWebSafe(email);
-    var parEmail = parseInt(cache.get(cle) || "0", 10) + 1;
-    cache.put(cle, String(parEmail), 3600);
-    if (parEmail > LIMITES.demandesParEmailParHeure) { return true; }
-  }
+// Limite le nombre de demandes (anti-spam) : au total, par email, par
+// téléphone, et nombre de rendez-vous réellement créés par heure et par jour.
+function tropDeDemandes(p) {
+  var cache = CacheService.getScriptCache();
+  if (parseInt(cache.get("creations:heure") || "0", 10) >= LIMITES.creationsParHeure) { return true; }
+  if (parseInt(cache.get("creations:jour") || "0", 10) >= LIMITES.creationsParJour) { return true; }
+  if (depasse("total", LIMITES.demandesTotalesPar10Min, 600)) { return true; }
+  if (depasse(cleSure("email", p.email), LIMITES.demandesParEmailParHeure, 3600)) { return true; }
+  var chiffres = p.telephone.replace(/\D/g, "").slice(-9);
+  if (depasse(cleSure("tel", chiffres), LIMITES.demandesParTelephoneParHeure, 3600)) { return true; }
   return false;
+}
+
+function compterCreation() {
+  var cache = CacheService.getScriptCache();
+  cache.put("creations:heure", String(parseInt(cache.get("creations:heure") || "0", 10) + 1), 3600);
+  cache.put("creations:jour", String(parseInt(cache.get("creations:jour") || "0", 10) + 1), 21600);
 }
 
 function envoyerEmailConfirmation(p) {
@@ -315,6 +344,17 @@ function obtenirCreneaux(e) {
     return reponse({ ok: false, raison: "invalide" });
   }
   if (dureeMin < 15 || dureeMin > 240) { dureeMin = 60; }
+  if (depasse("consultations", LIMITES.consultationsPar10Min, 600)) {
+    return reponse({ ok: false, raison: "limite" });
+  }
+  var debutAujourdhui = new Date();
+  debutAujourdhui.setHours(0, 0, 0, 0);
+  if (jour < debutAujourdhui || jour - debutAujourdhui > LIMITES.joursMaxAVenir * 24 * 3600 * 1000) {
+    return reponse({ ok: false, raison: "invalide" });
+  }
+  if (JOURS_FERMES.indexOf(jour.getDay()) !== -1) {
+    return reponse({ ok: true, ferme: true, creneaux: [] });
+  }
 
   var candidats = genererCreneauxJour(dureeMin);
 

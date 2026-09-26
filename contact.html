@@ -11,9 +11,14 @@
 <meta property="og:site_name" content="Fnails.chtrx">
 <meta property="og:title" content="Contact & rendez-vous · Fnails.chtrx">
 <meta property="og:description" content="Prenez rendez-vous chez Fnails.chtrx, onglerie au 71 rue de la Poste à Châteauroux. 06 58 81 11 98, 9h-13h et 14h-19h.">
-<meta property="og:image" content="assets/img/nail-art-dore-marbre.jpg">
+<meta property="og:image" content="https://rabichoufleur87.github.io/Onglerie-Chateauroux/assets/img/nail-art-dore-marbre.jpg">
+<meta property="og:url" content="https://rabichoufleur87.github.io/Onglerie-Chateauroux/contact.html">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#f5efe8">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23231a17'/%3E%3Ctext x='50%25' y='54%25' text-anchor='middle' dominant-baseline='middle' font-family='Georgia,serif' font-style='italic' font-size='40' fill='%23f5efe8'%3Ef%3C/text%3E%3Ccircle cx='47' cy='46' r='4' fill='%23e3a4b2'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/img/icone-180.png">
 <script src="assets/js/theme.js?v=6"></script>
 <link rel="preload" href="assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
@@ -232,11 +237,14 @@
               <a href="politique-de-confidentialite.html">En savoir plus</a>.
             </p>
 
-            <div id="rdv-resultat" class="rdv-resultat" hidden aria-live="polite">
-              <p class="note" id="rdv-resultat-texte"></p>
-              <pre id="rdv-texte" class="rdv-texte" hidden></pre>
-              <button type="button" class="btn btn--clair btn--petit btn--simple" data-action="copier-rdv" hidden>Copier le texte</button>
-            </div>
+          </div>
+
+          <!-- Hors des étapes : reste visible quel que soit l'écran affiché
+               (ex. retour à l'étape 1 après un envoi réussi). -->
+          <div id="rdv-resultat" class="rdv-resultat" hidden aria-live="polite">
+            <p class="note" id="rdv-resultat-texte"></p>
+            <pre id="rdv-texte" class="rdv-texte" hidden></pre>
+            <button type="button" class="btn btn--clair btn--petit btn--simple" data-action="copier-rdv" hidden>Copier le texte</button>
           </div>
 
         </form>
@@ -286,6 +294,6 @@
   </div>
 </footer>
 
-<script src="assets/js/app.js?v=7" defer></script>
+<script src="assets/js/app.js?v=8" defer></script>
 </body>
 </html>
