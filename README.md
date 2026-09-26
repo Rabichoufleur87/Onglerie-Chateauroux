@@ -46,6 +46,26 @@ fonctionnement, contrôlés par la constante `RDV_WEBAPP_URL` en haut de
   automatiques (envoyés via Gmail, gratuitement, par `Code.gs`) :
   un email de confirmation au client, et un email de notification à la
   gérante (adresse réglée dans `EMAIL_PATRON` en haut de `Code.gs`).
+  Le formulaire propose aussi une pièce jointe optionnelle (photo ou PDF,
+  5 Mo max) : si le client en ajoute une, elle est transmise par email à
+  la gérante (voir « Pièce jointe » ci-dessous).
+
+### Pièce jointe (photo, PDF)
+
+Le champ « Photo ou document » du formulaire est optionnel. Comme la requête
+principale est envoyée en GET (voir plus haut) et ne peut pas transporter de
+fichier, la pièce jointe part par une requête séparée, invisible pour la
+visiteuse : un `<form>` technique (`#rdv-form-piece-jointe` dans
+`contact.html`) ciblant une iframe cachée, qui envoie le fichier au même Web
+App avec `action=piece_jointe`. Le script (`traiterPieceJointe` dans
+`Code.gs`) vérifie le format (JPEG, PNG, WebP ou PDF) et la taille (5 Mo max)
+puis transmet le fichier à `EMAIL_PATRON` en pièce jointe, avec les
+informations du rendez-vous concerné.
+
+Comme cet envoi n'affiche aucune confirmation sur le site (il est
+volontairement silencieux, pour rester simple), un fichier refusé
+(mauvais format, trop volumineux) ne bloque jamais la prise de rendez-vous
+elle-même — la demande principale est toujours traitée normalement.
 
 ### Activer la création automatique dans Google Calendar
 

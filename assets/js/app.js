@@ -7,6 +7,10 @@
   var RDV_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzOFW5jkfrrgX63J_KuEcI0iDrVW17y4of-pSECPOtoVJRPoNOnPOFDTBmexXcuhrpk/exec";
   // Adresse à laquelle les demandes sont envoyées en mode "mailto" de secours.
   var RDV_EMAIL = "fnails.chtrx@gmail.com";
+  // Pièce jointe (photo, PDF) optionnelle : mêmes limites que côté script
+  // (google-apps-script/Code.gs, TAILLE_MAX_PIECE_JOINTE / TYPES_PIECE_JOINTE_ACCEPTES).
+  var PIECE_JOINTE_TAILLE_MAX = 5 * 1024 * 1024; // 5 Mo
+  var PIECE_JOINTE_TYPES_ACCEPTES = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
 
   // ===== Menu plein écran (mobile) =====
   var boutonMenu = document.querySelector("[data-action='menu']");
@@ -90,6 +94,25 @@
     var champDate = document.getElementById("rdv-date");
     var champHeure = document.getElementById("rdv-heure");
     var etatCreneaux = document.querySelector("[data-creneaux-etat]");
+    var champPieceJointe = document.getElementById("rdv-piece-jointe");
+    var erreurPieceJointe = document.getElementById("rdv-piece-jointe-erreur");
+    var formPieceJointe = document.getElementById("rdv-form-piece-jointe");
+
+    // ===== Pièce jointe (optionnelle) =====
+    // Transmise séparément par un vrai <form> ciblant une iframe cachée : la
+    // requête principale (en GET, voir plus bas) ne peut pas porter de fichier.
+    if (RDV_WEBAPP_URL && formPieceJointe) {
+      formPieceJointe.action = RDV_WEBAPP_URL;
+    }
+    if (champPieceJointe) {
+      champPieceJointe.addEventListener("change", function () {
+        var fichier = champPieceJointe.files && champPieceJointe.files[0];
+        var valide = !fichier ||
+          (fichier.size <= PIECE_JOINTE_TAILLE_MAX && PIECE_JOINTE_TYPES_ACCEPTES.indexOf(fichier.type) !== -1);
+        if (!valide) { champPieceJointe.value = ""; }
+        if (erreurPieceJointe) { erreurPieceJointe.hidden = valide; }
+      });
+    }
 
     // ===== Jours proposés (aujourd'hui + 44 jours) =====
     var JOURS_PROPOSES = 45;
@@ -373,6 +396,15 @@
                 "Votre rendez-vous est confirmé pour le " + dateAffichee + " à " + d.heure + ", merci et à bientôt !",
                 true
               );
+              if (champPieceJointe && champPieceJointe.files && champPieceJointe.files[0] && formPieceJointe) {
+                document.getElementById("rdv-pj-nom").value = d.nom;
+                document.getElementById("rdv-pj-email").value = d.email;
+                document.getElementById("rdv-pj-prestation").value = d.prestation;
+                document.getElementById("rdv-pj-date").value = d.date;
+                document.getElementById("rdv-pj-heure").value = d.heure;
+                formPieceJointe.submit();
+                champPieceJointe.value = "";
+              }
               formulaireRdv.reset();
               afficherEtape(1);
             } else if (resultatJson && resultatJson.raison === "conflit") {
