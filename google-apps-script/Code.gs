@@ -1,9 +1,8 @@
 /**
  * Fnails.chtrx — réception des demandes de rendez-vous du site,
  * création automatique de l'événement dans Google Calendar, email
- * de confirmation envoyé au client, email de notification envoyé
- * à la gérante (EMAIL_PATRON), et pièce jointe optionnelle (photo,
- * PDF) transmise à la gérante par email.
+ * de confirmation envoyé au client, et email de notification envoyé
+ * à la gérante (EMAIL_PATRON).
  *
  * Installation (voir aussi README.md à la racine du dépôt) :
  * 1. Aller sur https://script.google.com et créer un nouveau projet,
@@ -48,11 +47,6 @@ var HORAIRES = {
   pasCreneauxMin: 30 // intervalle entre deux créneaux proposés dans le menu déroulant
 };
 
-// Pièce jointe (photo, PDF) optionnelle : mêmes limites que côté site
-// (assets/js/app.js, PIECE_JOINTE_TAILLE_MAX / PIECE_JOINTE_TYPES_ACCEPTES).
-var TAILLE_MAX_PIECE_JOINTE = 5 * 1024 * 1024; // 5 Mo
-var TYPES_PIECE_JOINTE_ACCEPTES = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
-
 function doGet(e) {
   if (e.parameter && e.parameter.action === "creneaux") {
     return obtenirCreneaux(e);
@@ -61,9 +55,6 @@ function doGet(e) {
 }
 
 function doPost(e) {
-  if (e.parameter && e.parameter.action === "piece_jointe") {
-    return traiterPieceJointe(e);
-  }
   return traiterDemande(e);
 }
 
@@ -303,73 +294,6 @@ function envoyerEmailPatron(p) {
     MailApp.sendEmail(EMAIL_PATRON, sujet, corps);
   } catch (erreur) {
     // L'email a échoué : le rendez-vous reste créé, on n'interrompt rien.
-  }
-}
-
-// Reçoit une pièce jointe (photo, PDF) et la transmet par email à la
-// gérante. Appelée séparément de traiterDemande : la requête principale
-// est envoyée en GET (voir assets/js/app.js) et ne peut donc pas porter
-// de fichier, il faut un vrai <form> en POST pour ça. Le site n'affiche
-// aucune confirmation pour cet envoi (formulaire ciblant une iframe
-// cachée) : les vérifications ci-dessous sont donc la seule protection,
-// aucune erreur n'est visible côté client.
-function traiterPieceJointe(e) {
-  var verrou = LockService.getScriptLock();
-
-  try {
-    verrou.waitLock(10000);
-  } catch (erreur) {
-    return reponse({ ok: false, raison: "occupe" });
-  }
-
-  try {
-    var brut = e.parameter || {};
-    if (tropDeDemandes(brut)) {
-      return reponse({ ok: false, raison: "limite" });
-    }
-
-    var fichier = brut.fichier;
-    if (!fichier || typeof fichier.getBytes !== "function") {
-      return reponse({ ok: false, raison: "invalide" });
-    }
-    if (fichier.getBytes().length > TAILLE_MAX_PIECE_JOINTE) {
-      return reponse({ ok: false, raison: "invalide" });
-    }
-    if (TYPES_PIECE_JOINTE_ACCEPTES.indexOf(fichier.getContentType()) === -1) {
-      return reponse({ ok: false, raison: "invalide" });
-    }
-
-    if (!EMAIL_PATRON) {
-      return reponse({ ok: true });
-    }
-
-    var L = LIMITES.longueurs;
-    var nom = nettoyer(brut.nom, L.nom, true) || "—";
-    var email = nettoyer(brut.email, L.email, true) || "—";
-    var prestation = nettoyer(brut.prestation, L.prestation, true) || "—";
-    var date = /^\d{4}-\d{2}-\d{2}$/.test(brut.date) ? String(brut.date) : "—";
-    var heure = /^\d{2}:\d{2}$/.test(brut.heure) ? String(brut.heure) : "—";
-
-    var sujet = "Pièce jointe RDV — " + prestation + " — " + nom;
-    var corps = [
-      "Pièce jointe reçue pour la demande de rendez-vous suivante :",
-      "",
-      "Prestation : " + prestation,
-      "Date : " + date,
-      "Heure : " + heure,
-      "Client : " + nom,
-      "Email : " + email
-    ].join("\n");
-
-    try {
-      MailApp.sendEmail(EMAIL_PATRON, sujet, corps, { attachments: [fichier] });
-    } catch (erreur) {
-      return reponse({ ok: false, raison: "invalide" });
-    }
-
-    return reponse({ ok: true });
-  } finally {
-    verrou.releaseLock();
   }
 }
 
