@@ -99,7 +99,6 @@ Surlignées en rose sur le site (classe `a-completer`), à remplacer dès que po
 - **Médiateur de la consommation** (mentions légales) : obligatoire pour vendre
   des prestations à des particuliers. Adhérer à un médiateur agréé (liste sur
   economie.gouv.fr/mediation-conso), puis indiquer son nom, son adresse et son site.
-- Lien Instagram (le compte `@fnails.chtrx` est mentionné mais non lié).
 
 Confirmées et déjà intégrées :
 - Adresse : 71 rue de la Poste, 36000 Châteauroux
@@ -109,6 +108,7 @@ Confirmées et déjà intégrées :
 - Gérante : Fanny Foulatier, micro-entreprise (TVA non applicable, art. 293 B du CGI)
 - Email : fnails.chtrx@gmail.com
 - TikTok : [@fnails.chtrx_](https://www.tiktok.com/@fnails.chtrx_)
+- Instagram : [@fnails.chtrx](https://www.instagram.com/fnails.chtrx/)
 - Tarifs des 17 prestations (pose américaine, pose capsules + gel, gainage,
   dépose, pédicure)
 - Prise de rendez-vous directement sur le site (`contact.html#rdv`)
