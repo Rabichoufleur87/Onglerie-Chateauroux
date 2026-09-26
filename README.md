@@ -96,10 +96,6 @@ L'URL du Web App ne change pas : rien à modifier dans `assets/js/app.js`.
 
 Surlignées en rose sur le site (classe `a-completer`), à remplacer dès que possible :
 
-- **Nom de la gérante** : mentions légales (éditeur, directrice de la publication)
-  et politique de confidentialité (responsable du traitement).
-- **Régime de TVA** (mentions légales) : « TVA non applicable, article 293 B du CGI »
-  en micro-entreprise, sinon le numéro de TVA intracommunautaire.
 - **Médiateur de la consommation** (mentions légales) : obligatoire pour vendre
   des prestations à des particuliers. Adhérer à un médiateur agréé (liste sur
   economie.gouv.fr/mediation-conso), puis indiquer son nom, son adresse et son site.
@@ -110,6 +106,7 @@ Confirmées et déjà intégrées :
 - Téléphone : 06 58 81 11 98
 - Horaires : 9h-13h et 14h-19h, sur rendez-vous
 - SIRET : 943 481 648 00013
+- Gérante : Fanny Foulatier, micro-entreprise (TVA non applicable, art. 293 B du CGI)
 - Email : fnails.chtrx@gmail.com
 - TikTok : [@fnails.chtrx_](https://www.tiktok.com/@fnails.chtrx_)
 - Tarifs des 17 prestations (pose américaine, pose capsules + gel, gainage,
