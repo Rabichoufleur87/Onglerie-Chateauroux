@@ -4,7 +4,7 @@
   // ===== Configuration prise de rendez-vous =====
   // RDV_WEBAPP_URL : URL du Web App Google Apps Script (voir google-apps-script/Code.gs
   // et le README). Tant qu'elle est vide, le formulaire utilise le mode "mailto" de secours.
-  var RDV_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwY2eQIhn1gAZwwQCW5o62j5DjcU-3I_dNFf4MFQC-LfQlc2nHAfsX2U8YZ9WuE7d3k/exec";
+  var RDV_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxrthiWP4emBmj5XI28tyjMgmZC677lv6h25_5BxcivhEVrYDrCGvOsaFStGuKiuTrg/exec";
   // Adresse à laquelle les demandes sont envoyées en mode "mailto" de secours.
   var RDV_EMAIL = "fnails.chtrx@gmail.com";
 
@@ -376,8 +376,12 @@
           .then(function (reponseHttp) { return reponseHttp.json(); })
           .then(function (resultatJson) {
             if (resultatJson && resultatJson.ok) {
+              var dateChoisie = new Date(d.date + "T00:00:00");
+              var dateAffichee = isNaN(dateChoisie.getTime())
+                ? d.date
+                : dateChoisie.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
               afficherResultat(
-                "Votre demande a été envoyée : elle apparaît directement dans l'agenda du salon. Vous recevrez une confirmation.",
+                "Votre rendez-vous est confirmé pour le " + dateAffichee + " à " + d.heure + ", merci et à bientôt !",
                 true
               );
               formulaireRdv.reset();
