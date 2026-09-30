@@ -109,7 +109,7 @@ Confirmées et déjà intégrées :
 - Email : fnails.chtrx@gmail.com
 - TikTok : [@fnails.chtrx_](https://www.tiktok.com/@fnails.chtrx_)
 - Instagram : [@fnails.chtrx](https://www.instagram.com/fnails.chtrx/)
-- Tarifs des 17 prestations (pose américaine, pose capsules + gel, gainage,
+- Tarifs des 26 prestations (pose américaine, pose capsules + gel, gainage,
   dépose, pédicure)
 - Prise de rendez-vous directement sur le site (`contact.html#rdv`)
 
