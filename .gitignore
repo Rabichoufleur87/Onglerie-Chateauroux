@@ -1,0 +1,18 @@
+
+# Documents privés : devis, factures, contenus bruts, questionnaire
+_admin/
+
+# Secrets
+.env
+.env.*
+*.pem
+
+# Système / éditeurs
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Dépendances et builds
+node_modules/
+dist/
