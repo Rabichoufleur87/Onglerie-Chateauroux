@@ -102,6 +102,7 @@
       var aujourdhui = new Date();
       for (var i = 0; i < JOURS_PROPOSES; i++) {
         var jour = new Date(aujourdhui.getFullYear(), aujourdhui.getMonth(), aujourdhui.getDate() + i);
+        if (jour.getDay() === 0) { continue; } // fermé le dimanche
         var option = document.createElement("option");
         option.value = versISO(jour);
         var libelle = jour.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
@@ -119,7 +120,7 @@
     var depuisMinutes = function (total) {
       return ("0" + Math.floor(total / 60)).slice(-2) + ":" + ("0" + (total % 60)).slice(-2);
     };
-    // Mêmes horaires que le script (matin/après-midi, pas de 30 min), affichés
+    // Mêmes horaires que le script (matin/après-midi, pile à l'heure), affichés
     // tout de suite pour ne pas faire attendre la vérification en direct.
     // Elle sera de toute façon revérifiée par le script à l'envoi du formulaire.
     var remplirGenerique = function (note) {
@@ -134,7 +135,7 @@
           option.value = h;
           option.textContent = h;
           champHeure.appendChild(option);
-          curseur += 30;
+          curseur += 60;
         }
       });
       champHeure.disabled = false;

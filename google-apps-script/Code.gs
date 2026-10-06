@@ -44,7 +44,7 @@ var HORAIRES = {
   matinFin: "13:00",
   apremDebut: "14:00",
   apremFin: "19:00",
-  pasCreneauxMin: 30 // intervalle entre deux créneaux proposés dans le menu déroulant
+  pasCreneauxMin: 60 // intervalle entre deux créneaux proposés dans le menu déroulant
 };
 
 function doGet(e) {
@@ -131,8 +131,8 @@ var LIMITES = {
 };
 
 // Jours de fermeture (0 = dimanche, 1 = lundi, ..., 6 = samedi).
-// Ces jours ne sont ni proposés ni acceptés. Exemple : [0] ferme le dimanche.
-var JOURS_FERMES = [];
+// Ces jours ne sont ni proposés ni acceptés.
+var JOURS_FERMES = [0]; // fermé le dimanche
 
 // ===== Horaires =====
 
