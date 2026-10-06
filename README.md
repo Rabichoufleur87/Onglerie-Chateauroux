@@ -1,7 +1,7 @@
 # Fnails.chtrx — Site vitrine
 
 Site vitrine statique (HTML/CSS/JS, sans build) pour l'onglerie **Fnails.chtrx**,
-à Châteauroux.
+à Châteauroux. Hébergé sur GitHub Pages.
 
 ## Structure
 
